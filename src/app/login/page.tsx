@@ -18,12 +18,19 @@ export default function LoginPage() {
     setError("");
     setIsLoading(true);
 
+    console.log('=== Login attempt started ===');
+    console.log('Username:', companyUserName);
+    console.log('Password length:', password.length);
+
     try {
+      console.log('Calling signIn...');
       const result = await signIn("credentials", {
         company_user_name: companyUserName,
         password,
         redirect: false,
       });
+      
+      console.log('signIn result:', result);
 
       if (result?.error) {
         setError("ログインに失敗しました。ユーザー名とパスワードを確認してください。");
