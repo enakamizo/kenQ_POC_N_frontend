@@ -27,3 +27,4 @@ pnpm-debug.log*
 # エディタ系（必要なら）
 .vscode/
 .devcontainer/
+nul
