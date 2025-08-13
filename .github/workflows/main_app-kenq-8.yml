@@ -29,6 +29,16 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
+      - name: Copy artifact for deployment job
+        run: |
+          mkdir deploy
+          cp -r ./.next/standalone/. ./deploy
+          cp -r ./public ./deploy
+          cp -r ./.next/static/. ./deploy/.next/static
+
+      - name: Zip artifact for deployment
+        run: zip release.zip ./deploy -r    # 変更点➁
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -51,5 +61,6 @@ jobs:
         with:
           app-name: 'app-kenq-8'
           slot-name: 'Production'
-          package: .
+          package: ./deploy    # 変更点➂
+
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_71C0B8928EA64E469E9DB949E3ECDC70 }}
