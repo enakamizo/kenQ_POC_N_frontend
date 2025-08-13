@@ -36,6 +36,7 @@ export default function LoginPage() {
         setError("ログインに失敗しました。ユーザー名とパスワードを確認してください。");
         console.error("Login failed:", result.error);
       } else {
+        console.log('=== Login success, redirecting to /register ===');
         // router.push("/mypage"); //ログイン後の遷移先をマイページから案件登録に変更
         router.push("/register");
       }
