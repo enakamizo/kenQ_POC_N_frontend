@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [companyUserName, setCompanyUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,16 +19,21 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // URLの ?callbackUrl=... を優先。無ければ /register に遷移
       const callbackUrl = searchParams.get("callbackUrl") ?? "/register";
 
-      await signIn("credentials", {
+      const result = await signIn("credentials", {
         company_user_name: companyUserName,
         password,
-        redirect: true,   // NextAuth にリダイレクトを任せる
+        redirect: false, // 自分で遷移させる
         callbackUrl,
       });
-      // redirect:true のため通常ここ以降は実行されません
+
+      if (result?.ok) {
+        router.replace(result.url ?? callbackUrl);
+      } else {
+        setError("ログインに失敗しました。ユーザー名とパスワードを確認してください。");
+        console.error("Login failed:", result?.error);
+      }
     } catch (err) {
       console.error("Login error:", err);
       setError("エラーが発生しました。もう一度お試しください。");
@@ -36,42 +43,40 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white">
-      <img src="/研Qロゴ.png" alt="研Q" className="w-[200px] h-24 mb-12" />
+    <div className="flex justify-center items-center min-h-screen">
+      <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-96">
+        <h1 className="text-2xl mb-6">ログイン</h1>
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 w-full max-w-md">
-          {error}
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+
+        <div className="mb-4">
+          <label className="block mb-1">ユーザー名</label>
+          <input
+            type="text"
+            value={companyUserName}
+            onChange={(e) => setCompanyUserName(e.target.value)}
+            className="w-full border border-gray-300 px-3 py-2 rounded"
+            required
+          />
         </div>
-      )}
 
-      <form className="flex flex-col gap-6 w-full max-w-md" onSubmit={handleSubmit}>
-        <input
-          id="companyUserName"
-          name="companyUserName"
-          type="text"
-          placeholder="ユーザー名"
-          required
-          value={companyUserName}
-          onChange={(e) => setCompanyUserName(e.target.value)}
-          className="border border-gray-400 rounded-md px-6 py-4 text-xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          id="password"
-          name="password"
-          type="password"
-          placeholder="パスワード"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border border-gray-400 rounded-md px-6 py-4 text-xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div className="mb-6">
+          <label className="block mb-1">パスワード</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border border-gray-300 px-3 py-2 rounded"
+            required
+          />
+        </div>
+
         <button
           type="submit"
           disabled={isLoading}
-          className="bg-gray-700 text-white rounded py-4 text-xl font-semibold hover:bg-gray-800 disabled:bg-gray-400"
+          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 disabled:opacity-50"
         >
-          {isLoading ? "ログイン中..." : "Log In"}
+          {isLoading ? "ログイン中..." : "ログイン"}
         </button>
       </form>
     </div>
