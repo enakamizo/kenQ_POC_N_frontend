@@ -371,12 +371,14 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
 
       {/* 研究者階層 */}
       <div>
-        <label className="block text-sm font-medium mb-1">研究者階層（複数選択可）</label>
-        <div className="p-4 rounded-lg border border-gray-300">
-          <div className="grid grid-cols-3 gap-x-8">
+        <label className="block text-sm font-medium mb-1">
+          研究者階層 <span className="text-red-500">*</span>
+        </label>
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-300">
+          <div className="grid grid-cols-2 gap-8">
             {/* 左列：すべて選択 */}
-            <div className="flex items-start">
-              <label className="flex items-center space-x-2">
+            <div>
+              <label className="flex items-center space-x-2 text-sm">
                 <input
                   type="checkbox"
                   checked={localFormData.researcherLevel.length === allResearcherLevels.length}
@@ -386,15 +388,16 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
                     setLocalFormData(prev => ({ ...prev, researcherLevel: updatedLevels }));
                     setFormData(prev => ({ ...prev, researcherLevel: updatedLevels }));
                   }}
+                  className="w-4 h-4"
                 />
                 <span>すべて選択</span>
               </label>
             </div>
 
-            {/* 右列：研究者階層チェックボックス（縦1列） */}
-            <div className="flex flex-col space-y-1">
+            {/* 右列：研究者階層チェックボックス（2列レイアウト） */}
+            <div className="grid grid-cols-2 gap-x-6 gap-y-2">
               {allResearcherLevels.map((level) => (
-                <label key={level} className="flex items-center space-x-2">
+                <label key={level} className="flex items-center space-x-2 text-sm">
                   <input
                     type="checkbox"
                     name="researcherLevel"
@@ -410,6 +413,7 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
                       setLocalFormData(prev => ({ ...prev, researcherLevel: updatedLevels }));
                       setFormData(prev => ({ ...prev, researcherLevel: updatedLevels }));
                     }}
+                    className="w-4 h-4"
                   />
                   <span>{level}</span>
                 </label>
@@ -419,22 +423,10 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
         </div>
       </div>
 
-      {/* 募集期限 */}
-      <div>
-        <label className="block text-sm font-medium mb-1">募集期限</label>
-        <input
-          type="date"
-          name="deadline"
-          value={localFormData.deadline}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-lg"
-        />
-      </div>
-
       {/* ボタン */}
       <div className="flex justify-center">
-        <button type="submit" className="bg-gray-400 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-500">
-          登録内容を確認する
+        <button type="submit" className="bg-gray-800 text-white font-semibold px-8 py-3 rounded-lg hover:bg-gray-900">
+          案件登録
         </button>
       </div>
 
