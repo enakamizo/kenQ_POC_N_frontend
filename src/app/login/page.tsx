@@ -1,17 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+//import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation"; //追加
 
 export default function LoginPage() {
   console.log('signIn function:', typeof signIn);
   
-  const router = useRouter();
+//  const router = useRouter();
   const [companyUserName, setCompanyUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams(); //追加
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,31 +24,54 @@ export default function LoginPage() {
     console.log('Username:', companyUserName);
     console.log('Password length:', password.length);
 
+//    try {
+//      console.log('Calling signIn...');
+//      const result = await signIn("credentials", {
+//        company_user_name: companyUserName,
+//        password,
+//        redirect: false,
+//      });
+//      
+//      console.log('signIn result:', result);
+//
+//      if (result?.error) {
+//        setError("ログインに失敗しました。ユーザー名とパスワードを確認してください。");
+//        console.error("Login failed:", result.error);
+//      } else {
+//        console.log('=== Login success, redirecting to /register ===');
+//        // router.push("/mypage"); //ログイン後の遷移先をマイページから案件登録に変更
+//        router.push("/register");
+//      }
+//    } catch (err) {
+//      console.error("Login error:", err);
+//      setError("エラーが発生しました。もう一度お試しください。");
+//    } finally {
+//      setIsLoading(false);
+//    }
+//  };
+
+    // 追加
     try {
       console.log('Calling signIn...');
-      const result = await signIn("credentials", {
+
+      // URLに ?callbackUrl=... が付いていればそれを優先、無ければ既定ページへ
+      const callbackUrl = searchParams.get("callbackUrl") ?? "/register";
+
+      await signIn("credentials", {
         company_user_name: companyUserName,
         password,
-        redirect: false,
+        redirect: true,        // ← ここを true に：NextAuth にリダイレクトを任せる
+        callbackUrl,           // ← ここで遷移先を指定
       });
-      
-      console.log('signIn result:', result);
 
-      if (result?.error) {
-        setError("ログインに失敗しました。ユーザー名とパスワードを確認してください。");
-        console.error("Login failed:", result.error);
-      } else {
-        console.log('=== Login success, redirecting to /register ===');
-        // router.push("/mypage"); //ログイン後の遷移先をマイページから案件登録に変更
-        router.push("/register");
-      }
+      // redirect:true のため、ここ以降は基本的に実行されません
     } catch (err) {
       console.error("Login error:", err);
       setError("エラーが発生しました。もう一度お試しください。");
     } finally {
       setIsLoading(false);
     }
-  };
+  }; // ← ここが必要！
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white">
