@@ -195,19 +195,30 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
             placeholder="タイトルを入力してください"
             className="w-full p-2 border border-gray-300 rounded-lg"
           />
+          <div className="text-right mt-1">
+            <span className="text-xs text-gray-400">
+              {localFormData.title.length}/40文字
+            </span>
+          </div>
         </div>
 
       {/* 案件内容 */}
       <div>
-        <label className="block text-sm font-medium mb-1">案件内容<span className="text-red-500">*</span></label>
+        <label className="block text-sm font-medium mb-1">案件内容（1000文字以内）<span className="text-red-500">*</span></label>
         <textarea
           name="background"
           value={localFormData.background}
           onChange={handleChange}
           placeholder="案件内容を記載してください"
+          maxLength={1000}
           className="w-full p-2 border border-gray-300 rounded-lg"
           rows={4}
         />
+        <div className="text-right mt-1">
+          <span className="text-xs text-gray-400">
+            {localFormData.background.length}/1000文字
+          </span>
+        </div>
       </div>
 
       {/* 業種 */}
@@ -268,7 +279,7 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
           className="w-full p-2 border border-gray-300 rounded-lg resize-none"
           rows={3}
         />
-        <div className="text-right mt-1">
+        <div className="text-right -mt-1 mb-2">
           <span className="text-xs text-gray-400">
             {localFormData.businessDescription.length}/100文字
           </span>
