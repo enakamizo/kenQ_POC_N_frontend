@@ -376,7 +376,7 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
         </label>
         <div className="bg-gray-50 p-6 rounded-lg border border-gray-300">
           {/* 上段：すべて選択 */}
-          <div className="mb-4">
+          <div className="mb-4 pb-4 border-b border-gray-300">
             <label className="flex items-center space-x-2 text-sm">
               <input
                 type="checkbox"
