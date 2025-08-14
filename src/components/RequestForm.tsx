@@ -265,11 +265,13 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
           onChange={handleChange}
           placeholder="事業内容を記載してください"
           maxLength={100}
-          className="w-full p-2 pr-16 border border-gray-300 rounded-lg resize-none"
+          className="w-full p-2 border border-gray-300 rounded-lg resize-none"
           rows={3}
         />
-        <div className="absolute bottom-3 right-3 text-xs text-gray-400 bg-white px-1">
-          {localFormData.businessDescription.length}/100文字
+        <div className="text-right mt-1">
+          <span className="text-xs text-gray-400">
+            {localFormData.businessDescription.length}/100文字
+          </span>
         </div>
 
         {/* 入力欄の外側・右下にボタンを配置 */}
