@@ -28,13 +28,17 @@ export default function LoginPage() {
         callbackUrl,
       });
 
-      console.log("signIn result:", result);   
+      console.log("signIn result:", result);
+      console.log("callbackUrl:", callbackUrl);
 
       if (result && !(result as any).error) {
         const url = (result as any)?.url;
         const target = typeof url === "string" && url.length ? url : callbackUrl;
+        console.log("Success! Redirecting to:", target);
         router.replace(target);
         return;
+      } else {
+        console.log("signIn failed:", result);
       }
 
       setError("ログインに失敗しました。ユーザー名とパスワードを確認してください。");
