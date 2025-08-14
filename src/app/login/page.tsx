@@ -24,27 +24,11 @@ export default function LoginPage() {
       const result = await signIn("credentials", {
         company_user_name: companyUserName,
         password,
-        redirect: false, // 自分で遷移させる
+        redirect: true, // NextAuthに遷移を任せる
         callbackUrl,
       });
 
       console.log("signIn result:", result);
-      console.log("callbackUrl:", callbackUrl);
-
-      if (result && !(result as any).error) {
-        console.log("Success! Redirecting to:", callbackUrl);
-        console.log("Before setTimeout");
-        setTimeout(() => {
-          console.log("Inside setTimeout, redirecting to:", callbackUrl);
-          window.location.href = callbackUrl;
-        }, 500);
-        console.log("After setTimeout");
-        return;
-      } else {
-        console.log("signIn failed:", result);
-      }
-
-      setError("ログインに失敗しました。ユーザー名とパスワードを確認してください。");
     } catch (err) {
       console.error("Login error:", err);
       setError("エラーが発生しました。もう一度お試しください。");
