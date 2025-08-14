@@ -195,7 +195,7 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
             placeholder="タイトルを入力してください"
             className="w-full p-2 border border-gray-300 rounded-lg"
           />
-          <div className="text-right mt-1">
+          <div className="text-right -mt-1 mb-2">
             <span className="text-xs text-gray-400">
               {localFormData.title.length}/40文字
             </span>
@@ -214,7 +214,7 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
           className="w-full p-2 border border-gray-300 rounded-lg"
           rows={4}
         />
-        <div className="text-right mt-1">
+        <div className="text-right -mt-1 mb-2">
           <span className="text-xs text-gray-400">
             {localFormData.background.length}/1000文字
           </span>
