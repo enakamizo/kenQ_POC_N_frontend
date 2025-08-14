@@ -6,6 +6,13 @@ import Header from "@/components/Header";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
+import { Noto_Sans_JP } from "next/font/google";
+
+const notoSansJP = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -13,7 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="ja">
-      <body className="antialiased">
+      <body className={`${notoSansJP.className} antialiased`}>
         <SessionProvider>
           <FormProvider>
             {showHeader && <Header />}
