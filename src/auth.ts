@@ -77,6 +77,13 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // ログイン成功後は /register に遷移
+      if (url.startsWith(baseUrl)) {
+        return url;
+      }
+      return `${baseUrl}/register`;
+    },
   },
   pages: {
     signIn: "/login",
