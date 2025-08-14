@@ -28,12 +28,16 @@ export default function LoginPage() {
         callbackUrl,
       });
 
-      if (result?.ok) {
-        router.replace(result.url ?? callbackUrl);
-      } else {
-        setError("ログインに失敗しました。ユーザー名とパスワードを確認してください。");
-        console.error("Login failed:", result?.error);
+      console.log("signIn result:", result);   
+
+      if (result && !(result as any).error) {
+        const url = (result as any)?.url;
+        const target = typeof url === "string" && url.length ? url : callbackUrl;
+        router.replace(target);
+        return;
       }
+
+      setError("ログインに失敗しました。ユーザー名とパスワードを確認してください。");
     } catch (err) {
       console.error("Login error:", err);
       setError("エラーが発生しました。もう一度お試しください。");
