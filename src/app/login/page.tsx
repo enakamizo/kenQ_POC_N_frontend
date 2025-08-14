@@ -33,9 +33,12 @@ export default function LoginPage() {
 
       if (result && !(result as any).error) {
         console.log("Success! Redirecting to:", callbackUrl);
-        console.log("Before window.location.href");
-        window.location.href = callbackUrl;
-        console.log("After window.location.href");
+        console.log("Before setTimeout");
+        setTimeout(() => {
+          console.log("Inside setTimeout, redirecting to:", callbackUrl);
+          window.location.href = callbackUrl;
+        }, 500);
+        console.log("After setTimeout");
         return;
       } else {
         console.log("signIn failed:", result);
