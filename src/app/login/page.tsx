@@ -33,9 +33,9 @@ export default function LoginPage() {
 
       if (result && !(result as any).error) {
         console.log("Success! Redirecting to:", callbackUrl);
-        console.log("Before router.replace");
-        router.push(callbackUrl);
-        console.log("After router.replace");
+        console.log("Before window.location.href");
+        window.location.href = callbackUrl;
+        console.log("After window.location.href");
         return;
       } else {
         console.log("signIn failed:", result);
