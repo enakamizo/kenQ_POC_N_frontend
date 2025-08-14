@@ -220,28 +220,57 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
           className="w-full p-2 border border-gray-300 rounded-lg"
         >
           <option value="">選択してください</option>
-          <option value="自動車">自動車</option>
-          <option value="精密機械">精密機械</option>
-          <option value="機械">機械</option>
+          <option value="水産・農林業">水産・農林業</option>
+          <option value="鉱業">鉱業</option>
+          <option value="建設業">建設業</option>
+          <option value="食料品">食料品</option>
+          <option value="繊維製品">繊維製品</option>
+          <option value="パルプ・紙">パルプ・紙</option>
           <option value="化学">化学</option>
-          <option value="食品">食品</option>
-          <option value="建設">建設</option>
-          <option value="サービス">サービス</option>
-          <option value="その他">その他</option>
+          <option value="医薬品">医薬品</option>
+          <option value="石油・石炭製品">石油・石炭製品</option>
+          <option value="ゴム製品">ゴム製品</option>
+          <option value="ガラス・土石製品">ガラス・土石製品</option>
+          <option value="鉄鋼">鉄鋼</option>
+          <option value="非鉄金属">非鉄金属</option>
+          <option value="金属製品">金属製品</option>
+          <option value="機械">機械</option>
+          <option value="電気機器">電気機器</option>
+          <option value="輸送用機器">輸送用機器</option>
+          <option value="精密機器">精密機器</option>
+          <option value="その他製品">その他製品</option>
+          <option value="電気・ガス業">電気・ガス業</option>
+          <option value="陸運業">陸運業</option>
+          <option value="海運業">海運業</option>
+          <option value="空運業">空運業</option>
+          <option value="倉庫・運輸関連業">倉庫・運輸関連業</option>
+          <option value="情報・通信業">情報・通信業</option>
+          <option value="卸売業">卸売業</option>
+          <option value="小売業">小売業</option>
+          <option value="銀行業">銀行業</option>
+          <option value="証券、商品先物取引業">証券、商品先物取引業</option>
+          <option value="保険業">保険業</option>
+          <option value="その他金融業">その他金融業</option>
+          <option value="不動産業">不動産業</option>
+          <option value="サービス業">サービス業</option>
         </select>
       </div>
 
       {/* 事業内容 */}
       <div className="relative">
-        <label className="block text-sm font-medium mb-1">事業内容</label>
-        <input
-          type="text"
+        <label className="block text-sm font-medium mb-1">事業内容（100文字以内）</label>
+        <textarea
           name="businessDescription"
           value={localFormData.businessDescription}
           onChange={handleChange}
-          placeholder="事業内容を入力してください"
-          className="w-full p-2 border border-gray-300 rounded-lg"
+          placeholder="事業内容を記載してください"
+          maxLength={100}
+          className="w-full p-2 border border-gray-300 rounded-lg resize-none"
+          rows={3}
         />
+        <div className="absolute bottom-2 right-2 text-xs text-gray-400">
+          {localFormData.businessDescription.length}/100文字
+        </div>
 
         {/* 入力欄の外側・右下にボタンを配置 */}
         <div className="flex flex-col items-center mt-6 space-y-2">
