@@ -32,10 +32,10 @@ export default function LoginPage() {
       console.log("callbackUrl:", callbackUrl);
 
       if (result && !(result as any).error) {
-        const url = (result as any)?.url;
-        const target = typeof url === "string" && url.length ? url : callbackUrl;
-        console.log("Success! Redirecting to:", target);
-        router.replace(target);
+        console.log("Success! Redirecting to:", callbackUrl);
+        console.log("Before router.replace");
+        router.replace(callbackUrl);
+        console.log("After router.replace");
         return;
       } else {
         console.log("signIn failed:", result);
