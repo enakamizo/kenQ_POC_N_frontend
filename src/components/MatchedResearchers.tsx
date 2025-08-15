@@ -229,14 +229,14 @@ export default function MatchedResearchers({
           </thead>
           <tbody>
             {researchers.map((researcher: any) => (
-              <tr key={researcher.researcher_id} className="border-b">
-                <td className="p-2 break-words max-w-[140px]">{researcher.researcher_name}</td>
+              <tr key={researcher.researcher_info?.researcher_id || researcher.matching_id} className="border-b">
+                <td className="p-2 break-words max-w-[140px]">{researcher.researcher_info?.researcher_name}</td>
                 <td className="p-2 pr-1 break-words whitespace-nowrap text-sm">
-                  {researcher.researcher_affiliation_current}
+                  {researcher.researcher_info?.researcher_affiliation_current}
                 </td>
                 <td className="p-2 pl-1 text-left align-middle text-sm leading-tight break-words max-w-[150px]">
-                  <div className="text-xs text-gray-600 break-words">{researcher.researcher_department_current || "―"}</div>
-                  <div className="font-medium">{researcher.researcher_position_current || "―"}</div>
+                  <div className="text-xs text-gray-600 break-words">{researcher.researcher_info?.researcher_department_current || "―"}</div>
+                  <div className="font-medium">{researcher.researcher_info?.researcher_position_current || "―"}</div>
                 </td>
                 <td className="p-2 text-center">
                   <button onClick={() => handleInfoClick(researcher)} className="px-2 py-1 bg-gray-400 text-white rounded hover:bg-gray-500">info</button>
@@ -250,9 +250,9 @@ export default function MatchedResearchers({
                 <td className="p-2 text-center">
                   {researcher.matching_status === 0 && (
                     <button
-                      onClick={() => handleCheckboxChange(researcher.researcher_id)}
+                      onClick={() => handleCheckboxChange(researcher.researcher_info?.researcher_id || researcher.matching_id)}
                       className={`px-2 py-1 text-sm text-white rounded hover:opacity-90 ${
-                        selectedResearchers.includes(researcher.researcher_id)
+                        selectedResearchers.includes(researcher.researcher_info?.researcher_id || researcher.matching_id)
                           ? "bg-gray-500"
                           : "bg-gray-400 hover:bg-gray-500"
                       }`}
