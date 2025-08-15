@@ -276,6 +276,13 @@ export default function MatchedResearchers({
 
   console.log("MatchedResearchers - render時のresearchers:", researchers);
   console.log("MatchedResearchers - render時の研究者数:", researchers.length);
+  
+  // 最初の研究者のデータ構造を詳しく確認
+  if (researchers.length > 0) {
+    console.log("📋 サンプル研究者の詳細データ構造:", JSON.stringify(researchers[0], null, 2));
+    console.log("📋 サンプル研究者のexplanation:", researchers[0].explanation);
+    console.log("📋 サンプル研究者のmatching_reason:", researchers[0].matching_reason);
+  }
 
   return (
     <div className="relative mb-4 mt-6">
@@ -322,7 +329,7 @@ export default function MatchedResearchers({
                 <td className="px-4 py-3 text-center">
                   <button 
                     className="px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition" 
-                    onClick={() => handleShowMatchingReason(researcher.matching_reason)}
+                    onClick={() => handleShowMatchingReason(researcher.explanation || researcher.matching_reason || "マッチング理由が見つかりません")}
                   >
                     理由
                   </button>
