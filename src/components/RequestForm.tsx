@@ -25,9 +25,10 @@ type FormDataType = {
 
 type RequestFormProps = {
   onSubmit?: (data: FormDataType) => void;
+  onStatusChange?: (isProcessing: boolean) => void;
 };
 
-export default function RequestForm({ onSubmit }: RequestFormProps) {
+export default function RequestForm({ onSubmit, onStatusChange }: RequestFormProps) {
   const router = useRouter();
   const { formData, setFormData } = useFormContext();
 
@@ -85,6 +86,11 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
     setSelectedUniversities(universityArray);
   }
 }, []);
+
+  // ✅ 処理状態を親コンポーネントに通知
+  useEffect(() => {
+    onStatusChange?.(isResearching || showConfirmModal || loading || researchCompleted);
+  }, [isResearching, showConfirmModal, loading, researchCompleted, onStatusChange]);
 
   const handleDiagnosis = () => {
     // 必須5項目の簡易バリデーション

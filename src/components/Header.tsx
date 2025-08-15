@@ -2,12 +2,19 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [username, setUsername] = useState("ユーザー");
+
+  useEffect(() => {
+    // localStorageやセッションからユーザー名を取得
+    const storedUsername = localStorage.getItem("username") || localStorage.getItem("user_id") || "ユーザー";
+    setUsername(storedUsername);
+  }, []);
 
   const handleLogout = () => {
     // ログアウト処理（localStorageクリアなど）
@@ -40,7 +47,7 @@ const Header = () => {
         </button>
         
         {/* ユーザー名 */}
-        <span className="text-gray-700">森明 輪</span>
+        <span className="text-gray-700">{username}</span>
         
         {/* ログアウトアイコン */}
         <button

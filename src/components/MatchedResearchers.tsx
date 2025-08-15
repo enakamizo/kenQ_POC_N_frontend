@@ -240,7 +240,7 @@ export default function MatchedResearchers({
         r.researcher_info?.position || r.researcher_position_current || "―",
         r.research_field_pi || "―",
         r.keywords_pi || "―",
-        r.matching_reason || "―",
+        r.researcher_info?.explanation || r.explanation || r.matching_reason || "―",
         kakenUrl,
       ];
     });
