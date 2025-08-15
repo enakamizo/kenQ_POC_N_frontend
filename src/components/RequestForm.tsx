@@ -98,13 +98,16 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
 
     try {
       //const response = await fetch("https://app-kenq-1-azf7d4eje9cgaah2.canadacentral-01.azurewebsites.net/ai-diagnosis", {
-      // TODO: 環境変数問題解決後に戻す
-      const apiBaseUrl = "https://app-kenq-7-h7gre0afdgdbbzhy.canadacentral-01.azurewebsites.net";
+      const apiBaseUrl = process.env.NEXT_PUBLIC_AZURE_API_URL;
       console.log("Environment check:", {
         NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
         NEXT_PUBLIC_AZURE_API_URL: process.env.NEXT_PUBLIC_AZURE_API_URL,
         apiBaseUrl: apiBaseUrl
       });
+
+      if (!apiBaseUrl) {
+        throw new Error("API URLが設定されていません。環境変数を確認してください。");
+      }
       
       const response = await fetch(`${apiBaseUrl}/ai-diagnosis`, {
         method: "POST",
