@@ -136,6 +136,7 @@ export default function MatchedResearchers({
   // お気に入り機能
   const handleToggleFavorite = async (researcherId: string) => {
     console.log("🌟 お気に入り切り替え - researcher_id:", researcherId, "project_id:", projectId);
+    console.log("🌟 環境変数 NEXT_PUBLIC_AZURE_API_URL:", process.env.NEXT_PUBLIC_AZURE_API_URL);
     try {
       const apiUrl = `${process.env.NEXT_PUBLIC_AZURE_API_URL}/favorites`;
       const requestBody = {
@@ -159,8 +160,12 @@ export default function MatchedResearchers({
       if (!response.ok) {
         const errorText = await response.text();
         console.error("🌟 Response error:", errorText);
-        throw new Error(`Failed to toggle favorite: ${response.status} ${response.statusText}`);
+        console.error("🌟 Response headers:", Object.fromEntries(response.headers.entries()));
+        throw new Error(`Failed to toggle favorite: ${response.status} ${response.statusText} - ${errorText}`);
       }
+
+      const responseData = await response.text();
+      console.log("🌟 Response data:", responseData);
 
       // お気に入り状態を更新
       setFavorites((prev) => {
@@ -204,8 +209,8 @@ export default function MatchedResearchers({
 
     const rows = researchers.map((r) => {
       const researcherId = r.researcher_info?.researcher_id || r.matching_id;
-      const kakenNumber = researcherId.toString().padStart(13, '0');
-      const kakenUrl = `https://nrid.nii.ac.jp/ja/nrid/${kakenNumber}`;
+      const kakenNumber = researcherId.toString().padStart(12, '0');
+      const kakenUrl = `https://nrid.nii.ac.jp/ja/nrid/1${kakenNumber}`;
 
       return [
         researcherId,
@@ -288,7 +293,7 @@ export default function MatchedResearchers({
                 </td>
                 <td className="px-4 py-3 text-center">
                   <a 
-                    href={`https://nrid.nii.ac.jp/ja/nrid/${(researcher.researcher_info?.researcher_id || researcher.matching_id).toString().padStart(13, '0')}`}
+                    href={`https://nrid.nii.ac.jp/ja/nrid/1${(researcher.researcher_info?.researcher_id || researcher.matching_id).toString().padStart(12, '0')}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition"
