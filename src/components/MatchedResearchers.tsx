@@ -133,53 +133,67 @@ export default function MatchedResearchers({
   };
 
   // CSV出力
-  // お気に入り機能
-  const handleToggleFavorite = async (researcherId: string) => {
-    console.log("🌟 お気に入り切り替え - researcher_id:", researcherId, "project_id:", projectId);
-    console.log("🌟 環境変数 NEXT_PUBLIC_AZURE_API_URL:", process.env.NEXT_PUBLIC_AZURE_API_URL);
+  // ローカルお気に入り選択切り替え（☆ボタン用）
+  const handleToggleFavoriteLocal = (researcherId: string) => {
+    console.log("🌟 ローカルお気に入り切り替え - researcher_id:", researcherId);
+    setFavorites((prev) => {
+      const newFavorites = prev.includes(researcherId)
+        ? prev.filter((id) => id !== researcherId)
+        : [...prev, researcherId];
+      console.log("🌟 Updated local favorites:", newFavorites);
+      return newFavorites;
+    });
+  };
+
+  // お気に入り登録API実行（下部ボタン用）
+  const handleSubmitFavorites = async () => {
+    if (favorites.length === 0) {
+      alert("お気に入りに登録する研究者を選択してください（星マークをクリック）");
+      return;
+    }
+
+    console.log("🌟 お気に入り一括登録開始 - favorites:", favorites, "project_id:", projectId);
+    
     try {
-      const apiUrl = `${process.env.NEXT_PUBLIC_AZURE_API_URL}/favorites`;
-      const requestBody = {
-        researcher_id: Number(researcherId),
-        project_id: Number(projectId),
-      };
-      
-      console.log("🌟 API URL:", apiUrl);
-      console.log("🌟 Request body:", requestBody);
-      
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
+      for (const researcherId of favorites) {
+        const researcher = researchers.find(r => 
+          (r.researcher_info?.researcher_id || r.matching_id).toString() === researcherId
+        );
+        
+        const apiUrl = `${process.env.NEXT_PUBLIC_AZURE_API_URL}/favorites`;
+        const requestBody = {
+          researcher_id: Number(researcherId),
+          project_id: Number(projectId),
+          matching_id: researcher?.matching_id || Number(researcherId),
+          favorite_status: 1, // 1 = add to favorites
+        };
+        
+        console.log("🌟 API URL:", apiUrl);
+        console.log("🌟 Request body:", requestBody);
+        
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
 
-      console.log("🌟 Response status:", response.status);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("🌟 Response error:", errorText);
-        console.error("🌟 Response headers:", Object.fromEntries(response.headers.entries()));
-        throw new Error(`Failed to toggle favorite: ${response.status} ${response.statusText} - ${errorText}`);
+        console.log("🌟 Response status:", response.status);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("🌟 Response error:", errorText);
+          throw new Error(`Failed to register favorite: ${response.status} ${response.statusText}`);
+        }
       }
-
-      const responseData = await response.text();
-      console.log("🌟 Response data:", responseData);
-
-      // お気に入り状態を更新
-      setFavorites((prev) => {
-        const newFavorites = prev.includes(researcherId)
-          ? prev.filter((id) => id !== researcherId)
-          : [...prev, researcherId];
-        console.log("🌟 Updated favorites:", newFavorites);
-        return newFavorites;
-      });
       
-      console.log("🌟 お気に入り切り替え成功");
+      alert(`${favorites.length}人の研究者をお気に入りに登録しました！`);
+      console.log("🌟 お気に入り一括登録成功");
+      
     } catch (error) {
-      console.error("❌ お気に入り切り替えエラー:", error);
-      alert("お気に入りの切り替えに失敗しました。詳細はコンソールを確認してください。");
+      console.error("❌ お気に入り登録エラー:", error);
+      alert("お気に入りの登録に失敗しました。詳細はコンソールを確認してください。");
     }
   };
 
@@ -311,14 +325,14 @@ export default function MatchedResearchers({
                 </td>
                 <td className="px-4 py-3 text-center">
                   <button 
-                    onClick={() => handleToggleFavorite(researcher.researcher_info?.researcher_id || researcher.matching_id)}
+                    onClick={() => handleToggleFavoriteLocal((researcher.researcher_info?.researcher_id || researcher.matching_id).toString())}
                     className={`transition text-lg ${
-                      favorites.includes(researcher.researcher_info?.researcher_id || researcher.matching_id)
+                      favorites.includes((researcher.researcher_info?.researcher_id || researcher.matching_id).toString())
                         ? "text-yellow-500 hover:text-yellow-600"
                         : "text-gray-400 hover:text-yellow-500"
                     }`}
                   >
-                    {favorites.includes(researcher.researcher_info?.researcher_id || researcher.matching_id) ? "★" : "☆"}
+                    {favorites.includes((researcher.researcher_info?.researcher_id || researcher.matching_id).toString()) ? "★" : "☆"}
                   </button>
                 </td>
               </tr>
@@ -330,14 +344,7 @@ export default function MatchedResearchers({
       {/* 下部ボタン */}
       <div className="mt-6 flex justify-center gap-4">
         <button
-          onClick={() => {
-            // お気に入り登録処理（選択された研究者がいる場合）
-            if (favorites.length === 0) {
-              alert("お気に入りに登録する研究者を選択してください（星マークをクリック）");
-              return;
-            }
-            alert(`${favorites.length}人の研究者をお気に入りに登録しました！`);
-          }}
+          onClick={handleSubmitFavorites}
           className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium"
         >
           お気に入り登録する
