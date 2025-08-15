@@ -230,13 +230,13 @@ export default function MatchedResearchers({
           <tbody>
             {researchers.map((researcher: any) => (
               <tr key={researcher.researcher_info?.researcher_id || researcher.matching_id} className="border-b">
-                <td className="p-2 break-words max-w-[140px]">{researcher.researcher_info?.researcher_name}</td>
+                <td className="p-2 break-words max-w-[140px]">{researcher.researcher_info?.name}</td>
                 <td className="p-2 pr-1 break-words whitespace-nowrap text-sm">
-                  {researcher.researcher_info?.researcher_affiliation_current}
+                  {researcher.researcher_info?.university}
                 </td>
                 <td className="p-2 pl-1 text-left align-middle text-sm leading-tight break-words max-w-[150px]">
-                  <div className="text-xs text-gray-600 break-words">{researcher.researcher_info?.researcher_department_current || "―"}</div>
-                  <div className="font-medium">{researcher.researcher_info?.researcher_position_current || "―"}</div>
+                  <div className="text-xs text-gray-600 break-words">{researcher.researcher_info?.affiliation || "―"}</div>
+                  <div className="font-medium">{researcher.researcher_info?.position || "―"}</div>
                 </td>
                 <td className="p-2 text-center">
                   <button onClick={() => handleInfoClick(researcher)} className="px-2 py-1 bg-gray-400 text-white rounded hover:bg-gray-500">info</button>
