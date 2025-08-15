@@ -21,6 +21,8 @@ export default function MatchedResearchers({
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [projectTitle, setProjectTitle] = useState("");
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [showFavoriteConfirm, setShowFavoriteConfirm] = useState(false);
+  const [showFavoriteSuccess, setShowFavoriteSuccess] = useState(false);
 
   const router = useRouter();
 
@@ -188,11 +190,13 @@ export default function MatchedResearchers({
         }
       }
       
-      alert(`${favorites.length}人の研究者をお気に入りに登録しました！`);
+      setShowFavoriteConfirm(false);
+      setShowFavoriteSuccess(true);
       console.log("🌟 お気に入り一括登録成功");
       
     } catch (error) {
       console.error("❌ お気に入り登録エラー:", error);
+      setShowFavoriteConfirm(false);
       alert("お気に入りの登録に失敗しました。詳細はコンソールを確認してください。");
     }
   };
@@ -344,7 +348,13 @@ export default function MatchedResearchers({
       {/* 下部ボタン */}
       <div className="mt-6 flex justify-center gap-4">
         <button
-          onClick={handleSubmitFavorites}
+          onClick={() => {
+            if (favorites.length === 0) {
+              alert("お気に入りに登録する研究者を選択してください（星マークをクリック）");
+              return;
+            }
+            setShowFavoriteConfirm(true);
+          }}
           className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium"
         >
           お気に入り登録する
@@ -409,6 +419,49 @@ export default function MatchedResearchers({
               className="mt-6 w-full py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition"
             >
               閉じる
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* お気に入り登録確認ポップアップ */}
+      {showFavoriteConfirm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full mx-4">
+            <h2 className="text-lg font-semibold mb-4">お気に入り登録確認</h2>
+            <p className="text-gray-600 mb-6">お気に入りの研究者を登録しますか？</p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setShowFavoriteConfirm(false)}
+                className="px-6 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition"
+              >
+                いいえ
+              </button>
+              <button
+                onClick={handleSubmitFavorites}
+                className="px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition"
+              >
+                はい
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* お気に入り登録成功ポップアップ */}
+      {showFavoriteSuccess && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full mx-4">
+            <h2 className="text-lg font-semibold mb-4">お気に入り登録完了</h2>
+            <p className="text-gray-600 mb-6">{favorites.length}人の研究者をお気に入りに登録しました！</p>
+            <button
+              onClick={() => {
+                setShowFavoriteSuccess(false);
+                setFavorites([]); // お気に入り選択をリセット
+              }}
+              className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+            >
+              OK
             </button>
           </div>
         </div>
