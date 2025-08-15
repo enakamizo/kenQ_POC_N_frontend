@@ -53,6 +53,11 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
   const [showModal, setShowModal] = useState(false);
   const [diagnosisResult, setDiagnosisResult] = useState<string | null>(null);
 
+  // ✅ 研究者マッチング状態管理
+  const [isResearching, setIsResearching] = useState(false);
+  const [researchCompleted, setResearchCompleted] = useState(false);
+  const [projectId, setProjectId] = useState<number | null>(null);
+
   // ✅ 選択した大学を formData に反映
   useEffect(() => {
     if (JSON.stringify(formData.university) !== JSON.stringify(selectedUniversities)) {
@@ -173,12 +178,65 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (onSubmit) {
       onSubmit(localFormData);
-    } else {
-      router.push("/register/confirm");
+      return;
+    }
+
+    // 必須項目のバリデーション
+    if (!localFormData.category || !localFormData.title || !localFormData.background) {
+      setValidationError("必須項目を入力してください。");
+      return;
+    }
+
+    setIsResearching(true);
+
+    try {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_AZURE_API_URL || "https://app-kenq-7-h7gre0afdgdbbzhy.canadacentral-01.azurewebsites.net";
+      console.log("Project registration API call:", {
+        NEXT_PUBLIC_AZURE_API_URL: process.env.NEXT_PUBLIC_AZURE_API_URL,
+        apiBaseUrl: apiBaseUrl,
+        endpoint: `${apiBaseUrl}/project-registration`
+      });
+      
+      const response = await fetch(`${apiBaseUrl}/project-registration`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          company_user_id: 1, // 仮のユーザーID
+          project_title: localFormData.title,
+          project_content: localFormData.background,
+          industry: localFormData.industry || "",
+          business_description: localFormData.businessDescription || "",
+          university: Array.isArray(formData.university) ? formData.university : [],
+          preferred_researcher_level: Array.isArray(formData.researcherLevel) ? formData.researcherLevel : [],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("案件登録に失敗しました");
+      }
+
+      const result = await response.json();
+      console.log("Project registration result:", result);
+      
+      setProjectId(result.project_id || result.id);
+      
+      // リサーチ完了状態に移行（実際はバックエンドの処理完了を待つ）
+      setTimeout(() => {
+        setIsResearching(false);
+        setResearchCompleted(true);
+      }, 3000); // 仮の3秒待機
+
+    } catch (error) {
+      console.error("Registration error:", error);
+      setValidationError("案件登録中にエラーが発生しました。");
+      setIsResearching(false);
     }
   };
 
