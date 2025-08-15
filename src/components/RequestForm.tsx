@@ -49,6 +49,7 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
   const [validationError, setValidationError] = useState<string | null>(null); // ←AIアシストのため５つの項目すべてに入力してもらう注意を表示するため
 
   // ✅ モーダル表示と診断結果を管理
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [diagnosisResult, setDiagnosisResult] = useState<string | null>(null);
 
@@ -79,9 +80,7 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
   }
 }, []);
 
-  const handleDiagnosis = async () => {
-    console.log("送信内容", localFormData);
-
+  const handleDiagnosis = () => {
     // 必須5項目の簡易バリデーション
     if (
       !localFormData.category ||
@@ -94,6 +93,20 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
       return;
     }
 
+    setShowConfirmModal(true);
+  };
+
+  const applyDiagnosisResult = () => {
+    if (diagnosisResult) {
+      setLocalFormData(prev => ({ ...prev, background: diagnosisResult }));
+      setFormData(prev => ({ ...prev, background: diagnosisResult }));
+      setShowModal(false);
+    }
+  };
+
+  const executeDiagnosis = async () => {
+    console.log("送信内容", localFormData);
+    setShowConfirmModal(false);
     setLoading(true); // ← しばらくお待ちください。の表示のため
 
     try {
@@ -309,17 +322,78 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
           </button>
         </div>
 
+        {/* AI診断確認ポップアップ */}
+        {showConfirmModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                  <span className="text-blue-600 text-lg">✨</span>
+                </div>
+                <h2 className="text-lg font-semibold">AIアシスト - 案件内容の最適化</h2>
+              </div>
+              <p className="text-gray-700 mb-4">
+                AIが現在の案件内容を分析し、より効果的で魅力的な案件を案内内容を提案します。
+              </p>
+              <p className="text-gray-600 text-sm mb-6">
+                現在入力されている内容をAIが分析し、より魅力的で効果的な案件を案内内容を提案します。
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50"
+                  onClick={() => setShowConfirmModal(false)}
+                >
+                  キャンセル
+                </button>
+                <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center gap-2"
+                  onClick={executeDiagnosis}
+                >
+                  <span>✨</span>
+                  AI診断を実行
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
-              <h2 className="text-xl font-semibold mb-4">AI診断結果</h2>
-              <p className="mb-4 whitespace-pre-wrap max-h-[70vh] overflow-y-auto">{diagnosisResult}</p>
-              <div className="flex justify-end">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full mx-4">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                  <span className="text-blue-600 text-lg">✨</span>
+                </div>
+                <h2 className="text-lg font-semibold">AIアシスト - 案件内容の最適化</h2>
+              </div>
+              <p className="text-gray-700 mb-4">
+                AIが現在の案件内容を分析し、より効果的で魅力的な案件を案内内容を提案します。
+              </p>
+              
+              <div className="mb-4">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-sm font-medium text-gray-700">提案案件内容</label>
+                  <span className="text-xs text-gray-400">
+                    {diagnosisResult?.length || 0}/1000文字
+                  </span>
+                </div>
+                <div className="border border-gray-300 rounded-lg p-3 bg-gray-50 max-h-60 overflow-y-auto">
+                  <p className="whitespace-pre-wrap text-sm text-gray-800">{diagnosisResult}</p>
+                </div>
+              </div>
+              
+              <div className="flex gap-3 justify-end">
                 <button
-                  className="px-4 py-2 bg-blue-400 text-white font-semibold rounded hover:bg-blue-500"
+                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50"
                   onClick={() => setShowModal(false)}
                 >
-                  閉じる
+                  キャンセル
+                </button>
+                <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  onClick={applyDiagnosisResult}
+                >
+                  提案を適用
                 </button>
               </div>
             </div>
@@ -328,28 +402,39 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
 
         {loading && (
           <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
-              <p className="text-lg font-medium mb-4">しばらくお待ちください</p>
-              <svg
-                className="animate-spin h-10 w-10 text-blue-500"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                ></path>
-              </svg>
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                  <span className="text-blue-600 text-lg">✨</span>
+                </div>
+                <h2 className="text-lg font-semibold">AIアシスト - 案件内容の最適化</h2>
+              </div>
+              <p className="text-gray-700 mb-6">
+                AIが現在の案件内容を分析し、より効果的で魅力的な案件を案内内容を提案します。
+              </p>
+              <div className="flex flex-col items-center">
+                <svg
+                  className="animate-spin h-10 w-10 text-blue-500 mb-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                <p className="text-gray-600 text-center">AIが案件内容を分析中...</p>
+              </div>
             </div>
           </div>
         )}
