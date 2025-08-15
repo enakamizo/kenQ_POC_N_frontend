@@ -135,36 +135,58 @@ export default function MatchedResearchers({
   // CSV出力
   // お気に入り機能
   const handleToggleFavorite = async (researcherId: string) => {
+    console.log("🌟 お気に入り切り替え - researcher_id:", researcherId, "project_id:", projectId);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_AZURE_API_URL}/favorites`, {
+      const apiUrl = `${process.env.NEXT_PUBLIC_AZURE_API_URL}/favorites`;
+      const requestBody = {
+        researcher_id: Number(researcherId),
+        project_id: Number(projectId),
+      };
+      
+      console.log("🌟 API URL:", apiUrl);
+      console.log("🌟 Request body:", requestBody);
+      
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          researcher_id: Number(researcherId),
-          project_id: Number(projectId),
-        }),
+        body: JSON.stringify(requestBody),
       });
 
+      console.log("🌟 Response status:", response.status);
+      
       if (!response.ok) {
-        throw new Error(`Failed to toggle favorite: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error("🌟 Response error:", errorText);
+        throw new Error(`Failed to toggle favorite: ${response.status} ${response.statusText}`);
       }
 
       // お気に入り状態を更新
-      setFavorites((prev) =>
-        prev.includes(researcherId)
+      setFavorites((prev) => {
+        const newFavorites = prev.includes(researcherId)
           ? prev.filter((id) => id !== researcherId)
-          : [...prev, researcherId]
-      );
+          : [...prev, researcherId];
+        console.log("🌟 Updated favorites:", newFavorites);
+        return newFavorites;
+      });
+      
+      console.log("🌟 お気に入り切り替え成功");
     } catch (error) {
       console.error("❌ お気に入り切り替えエラー:", error);
-      alert("お気に入りの切り替えに失敗しました。");
+      alert("お気に入りの切り替えに失敗しました。詳細はコンソールを確認してください。");
     }
   };
 
   const handleExportCSV = () => {
-    if (researchers.length === 0) return;
+    console.log("📊 CSV出力開始 - researchers.length:", researchers.length);
+    console.log("📊 Researchers data:", researchers);
+    
+    if (researchers.length === 0) {
+      console.log("📊 研究者データが空のため、CSV出力をスキップ");
+      alert("エクスポートする研究者データがありません。");
+      return;
+    }
 
     const headers = [
       "研究者ID",
@@ -181,22 +203,24 @@ export default function MatchedResearchers({
     ];
 
     const rows = researchers.map((r) => {
-    const kakenNumber = r.researcher_id.toString().padStart(8, '0');
-    const kakenUrl = `https://nrid.nii.ac.jp/ja/nrid/10000${kakenNumber}`;
+      const researcherId = r.researcher_info?.researcher_id || r.matching_id;
+      const kakenNumber = researcherId.toString().padStart(13, '0');
+      const kakenUrl = `https://nrid.nii.ac.jp/ja/nrid/${kakenNumber}`;
 
       return [
-      r.researcher_id,
-      r.researcher_name,
-      r.researcher_name_alphabet,
-      r.researcher_name_kana,
-      r.researcher_affiliation_current,
-      r.researcher_department_current,
-      r.researcher_position_current,
-      r.research_field_pi,
-      r.keywords_pi,
-      r.matching_reason,
-      kakenUrl, //
-    ]});
+        researcherId,
+        r.researcher_info?.name || r.researcher_name || "―",
+        r.researcher_name_alphabet || "―",
+        r.researcher_name_kana || "―",
+        r.researcher_info?.university || r.researcher_affiliation_current || "―",
+        r.researcher_info?.affiliation || r.researcher_department_current || "―",
+        r.researcher_info?.position || r.researcher_position_current || "―",
+        r.research_field_pi || "―",
+        r.keywords_pi || "―",
+        r.matching_reason || "―",
+        kakenUrl,
+      ];
+    });
 
     const csvContent =
       [headers, ...rows]
@@ -264,7 +288,7 @@ export default function MatchedResearchers({
                 </td>
                 <td className="px-4 py-3 text-center">
                   <a 
-                    href={`https://nrid.nii.ac.jp/ja/nrid/1000${(researcher.researcher_info?.researcher_id || researcher.matching_id).toString().padStart(8, '0')}`}
+                    href={`https://nrid.nii.ac.jp/ja/nrid/${(researcher.researcher_info?.researcher_id || researcher.matching_id).toString().padStart(13, '0')}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition"
