@@ -99,7 +99,12 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
     try {
       //const response = await fetch("https://app-kenq-1-azf7d4eje9cgaah2.canadacentral-01.azurewebsites.net/ai-diagnosis", {
       const apiBaseUrl = process.env.NEXT_PUBLIC_AZURE_API_URL;
-      const response = await fetch(`/api/ai-diagnosis`, {
+      
+      if (!apiBaseUrl) {
+        throw new Error("API URLが設定されていません。環境変数を確認してください。");
+      }
+      
+      const response = await fetch(`${apiBaseUrl}/ai-diagnosis`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
