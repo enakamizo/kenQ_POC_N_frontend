@@ -77,6 +77,16 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
 
             {/* 下段：おすすめの研究者リスト */}
             <MatchedResearchers projectId={projectId} setLoading={() => {}} />
+            
+            {/* 新規登録に戻るリンク */}
+            <div className="mt-8 text-center">
+                <button
+                    onClick={() => window.location.href = '/register'}
+                    className="text-gray-600 hover:text-gray-800 transition underline"
+                >
+                    ← 新規登録に戻る
+                </button>
+            </div>
         </div>
     );
 }

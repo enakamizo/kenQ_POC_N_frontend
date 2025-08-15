@@ -232,14 +232,8 @@ export default function MatchedResearchers({
 
   return (
     <div className="relative mb-4 mt-6">
-      <div className="inline-flex items-center gap-3  pl-6">
+      <div className="pl-6">
         <h3 className="text-xl font-bold">おすすめの研究者リスト</h3>
-        <button
-          onClick={handleExportCSV}
-          className="px-4 py-1 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition text-sm font-semibold"
-        >
-          CSV出力
-        </button>
       </div>
 
       <div className="bg-white rounded-lg border border-gray-200">
@@ -253,7 +247,6 @@ export default function MatchedResearchers({
               <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20">詳細</th>
               <th className="px-4 py-3 text-center font-semibold text-gray-700 w-24">マッチング理由</th>
               <th className="px-4 py-3 text-center font-semibold text-gray-700 w-16">お気に入り</th>
-              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-24">オファー状況</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -270,12 +263,14 @@ export default function MatchedResearchers({
                   {researcher.researcher_info?.position || "―"}
                 </td>
                 <td className="px-4 py-3 text-center">
-                  <button 
-                    onClick={() => handleInfoClick(researcher)} 
-                    className="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition"
+                  <a 
+                    href={`https://nrid.nii.ac.jp/ja/nrid/1000${(researcher.researcher_info?.researcher_id || researcher.matching_id).toString().padStart(8, '0')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition"
                   >
                     詳細
-                  </button>
+                  </a>
                 </td>
                 <td className="px-4 py-3 text-center">
                   <button 
@@ -290,30 +285,12 @@ export default function MatchedResearchers({
                     onClick={() => handleToggleFavorite(researcher.researcher_info?.researcher_id || researcher.matching_id)}
                     className={`transition text-lg ${
                       favorites.includes(researcher.researcher_info?.researcher_id || researcher.matching_id)
-                        ? "text-red-500 hover:text-red-600"
-                        : "text-gray-400 hover:text-red-500"
+                        ? "text-yellow-500 hover:text-yellow-600"
+                        : "text-gray-400 hover:text-yellow-500"
                     }`}
                   >
-                    {favorites.includes(researcher.researcher_info?.researcher_id || researcher.matching_id) ? "♥" : "♡"}
+                    {favorites.includes(researcher.researcher_info?.researcher_id || researcher.matching_id) ? "★" : "☆"}
                   </button>
-                </td>
-                <td className="px-4 py-3 text-center">
-                  {researcher.matching_status === 0 && (
-                    <button
-                      onClick={() => handleCheckboxChange(researcher.researcher_info?.researcher_id || researcher.matching_id)}
-                      className={`px-3 py-1 text-xs text-white rounded transition ${
-                        selectedResearchers.includes(researcher.researcher_info?.researcher_id || researcher.matching_id)
-                          ? "bg-gray-600"
-                          : "bg-gray-500 hover:bg-gray-600"
-                      }`}
-                    >
-                      オファー
-                    </button>
-                  )}
-                  {researcher.matching_status === 1 && <span className="text-orange-500 text-xs">オファー中</span>}
-                  {researcher.matching_status === 2 && <span className="text-green-600 font-medium text-xs">成立</span>}
-                  {researcher.matching_status === 3 && <span className="text-gray-500 text-xs">不成立</span>}
-                  {researcher.matching_status === 4 && <span className="text-blue-600 text-xs">オファー有</span>}
                 </td>
               </tr>
             ))}
@@ -321,19 +298,27 @@ export default function MatchedResearchers({
         </table>
       </div>
 
-      <div className="mt-4 flex justify-center">
+      {/* 下部ボタン */}
+      <div className="mt-6 flex justify-center gap-4">
         <button
-          onClick={handleOffer}
-          disabled={selectedResearchers.length === 0}
-          className={`px-6 py-2 rounded-lg shadow-md transition duration-200 text-lg font-semibold ${
-            selectedResearchers.length === 0
-              ? "bg-gray-300 text-white cursor-not-allowed"
-              : "bg-gray-400 text-white hover:bg-gray-500"
-          }`}
+          onClick={() => {
+            // お気に入り登録処理（選択された研究者がいる場合）
+            if (favorites.length === 0) {
+              alert("お気に入りに登録する研究者を選択してください（星マークをクリック）");
+              return;
+            }
+            alert(`${favorites.length}人の研究者をお気に入りに登録しました！`);
+          }}
+          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium"
         >
-          オファーする
+          お気に入り登録する
         </button>
-
+        <button
+          onClick={handleExportCSV}
+          className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-medium"
+        >
+          CSV出力
+        </button>
       </div>
 
       {showPopup && (
