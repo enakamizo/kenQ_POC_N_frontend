@@ -57,6 +57,7 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
   const [isResearching, setIsResearching] = useState(false);
   const [researchCompleted, setResearchCompleted] = useState(false);
   const [projectId, setProjectId] = useState<number | null>(null);
+  const [researchResults, setResearchResults] = useState<any>(null);
 
   // ✅ 選択した大学を formData に反映
   useEffect(() => {
@@ -226,6 +227,7 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
       console.log("Project registration result:", result);
       
       setProjectId(result.project_id || result.id);
+      setResearchResults(result);
       
       // リサーチ完了状態に移行（実際はバックエンドの処理完了を待つ）
       setTimeout(() => {
@@ -239,6 +241,170 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
       setIsResearching(false);
     }
   };
+
+  // リサーチ完了画面
+  if (researchCompleted && researchResults) {
+    return (
+      <div className="max-w-4xl mx-auto p-8 bg-white rounded-lg">
+        <div className="text-center">
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+              <svg className="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800">リサーチ完了！</h1>
+          </div>
+          
+          <p className="text-gray-600 mb-6">
+            AIリサーチが完了しました。結果をご確認ください。
+          </p>
+          
+          <div className="flex items-center justify-center mb-8">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+              <svg className="w-10 h-10 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </div>
+          
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">リサーチが完了しました！</h2>
+          <p className="text-gray-600 mb-6">最適な研究者のマッチング結果を確認できます</p>
+          
+          <div className="text-sm text-gray-500 mb-8 flex items-center justify-center">
+            <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+            </svg>
+            処理時間: 15秒
+          </div>
+          
+          <div className="bg-blue-50 p-6 rounded-lg mb-8 text-left">
+            <div className="flex items-center mb-4">
+              <svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 className="text-lg font-semibold text-blue-800">リサーチした案件</h3>
+            </div>
+            
+            <h4 className="text-blue-600 font-medium mb-3">{researchResults.project_title}</h4>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+              <div>
+                <p><span className="font-medium">対象大学:</span> {researchResults.university?.length || 0}校</p>
+                <p><span className="font-medium">研究分野:</span> {localFormData.researchField || '指定なし'}</p>
+              </div>
+              <div>
+                <p><span className="font-medium">研究者階層:</span> {researchResults.level?.length || 0}項目</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={() => {
+                setResearchCompleted(false);
+                setIsResearching(false);
+                setProjectId(null);
+                setResearchResults(null);
+              }}
+              className="px-6 py-3 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              新しい案件を登録
+            </button>
+            <button
+              onClick={() => {
+                if (projectId) {
+                  router.push(`/projects/${projectId}`);
+                }
+              }}
+              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            >
+              結果に進む
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // AIリサーチ実行中画面
+  if (isResearching) {
+    return (
+      <div className="max-w-4xl mx-auto p-8 bg-white rounded-lg">
+        <div className="text-center">
+          <div className="flex items-center justify-center mb-6">
+            <svg
+              className="animate-spin h-12 w-12 text-blue-500 mr-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              ></path>
+            </svg>
+            <h1 className="text-2xl font-bold text-gray-800">AIリサーチ実行中</h1>
+          </div>
+          
+          <p className="text-gray-600 mb-4">
+            最適な研究者をAIが分析しています。処理完了まで画面を閉じずにお待ちください...
+          </p>
+          
+          <p className="text-green-600 text-sm mb-8">※ セッションが復元されました</p>
+          
+          <div className="bg-blue-50 p-6 rounded-lg mb-8 text-left">
+            <h2 className="text-lg font-semibold text-blue-800 mb-4">リサーチ中の案件</h2>
+            <h3 className="text-blue-600 font-medium mb-2">{localFormData.title}</h3>
+            <div className="text-sm text-gray-600 space-y-1">
+              <p><span className="font-medium">対象大学:</span> {Array.isArray(formData.university) ? formData.university.length : 0}校</p>
+              <p><span className="font-medium">研究分野:</span> {localFormData.researchField || '指定なし'}</p>
+              <p><span className="font-medium">研究者階層:</span> {Array.isArray(formData.researcherLevel) ? formData.researcherLevel.length : 0}項目</p>
+            </div>
+          </div>
+          
+          <div className="flex flex-col items-center">
+            <svg
+              className="animate-spin h-16 w-16 text-blue-500 mb-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              ></path>
+            </svg>
+            <p className="text-lg font-medium text-gray-700 mb-2">リサーチ中...</p>
+            <p className="text-sm text-gray-500">AIが最適な研究者を分析しています</p>
+            
+            <div className="mt-6 flex items-center text-gray-400">
+              <div className="animate-pulse w-2 h-2 bg-gray-400 rounded-full mr-1"></div>
+              <span className="text-sm">実行中...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg">
