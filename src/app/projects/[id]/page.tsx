@@ -63,10 +63,10 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg mt-10">
             {/* 上段：案件の詳細 */}
-            <ProjectDetails projectData={projectData.projectData} />
+            <ProjectDetails projectId={projectId} setLoading={() => {}} />
 
             {/* 下段：おすすめの研究者リスト */}
-            <MatchedResearchers matchingResults={projectData.matchingResults} />
+            <MatchedResearchers projectId={projectId} setLoading={() => {}} />
         </div>
     );
 }

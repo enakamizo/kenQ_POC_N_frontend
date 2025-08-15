@@ -26,6 +26,17 @@ export default function MatchedResearchers({
   useEffect(() => {
     const fetchResearchers = async () => {
       try {
+        // localStorageからマッチング結果を取得
+        const storedData = localStorage.getItem(`project_${projectId}`);
+        if (storedData) {
+          const data = JSON.parse(storedData);
+          setResearchers(data.matchingResults.matched_researchers || []);
+          setProjectTitle(data.projectData.title || "");
+          setLoading(false);
+          return;
+        }
+        
+        // フォールバック: APIから取得
         const apiUrl = `${process.env.NEXT_PUBLIC_AZURE_API_URL}/matching-results?project_id=${projectId}`;
         const response = await fetch(apiUrl, {
           method: "GET",

@@ -16,6 +16,16 @@ export default function ProjectDetails({
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
+        // localStorageからプロジェクトデータを取得
+        const storedData = localStorage.getItem(`project_${projectId}`);
+        if (storedData) {
+          const data = JSON.parse(storedData);
+          setProject(data.projectData);
+          setLoading(false);
+          return;
+        }
+        
+        // フォールバック: APIから取得（404エラーが予想される）
         const apiUrl = `${process.env.NEXT_PUBLIC_AZURE_API_URL}/matching-results?project_id=${projectId}`;
         const response = await fetch(apiUrl);
 
