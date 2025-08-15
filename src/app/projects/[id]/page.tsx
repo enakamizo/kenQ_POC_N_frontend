@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import ProjectDetails from "@/components/ProjectDetails";
 import MatchedResearchers from "@/components/MatchedResearchers";
-import Header from "@/components/Header";
 
 export default function ProjectPage({ params }: { params: { id: string } }) {
     const projectId = params.id;
@@ -62,35 +61,32 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
     }
 
     return (
-        <>
-            <Header />
-            <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg mt-10">
-                {/* 戻るボタン */}
-                <div className="mb-6">
-                    <button
-                        onClick={() => window.location.href = '/register'}
-                        className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
-                    >
-                        ← 登録画面に戻る
-                    </button>
-                </div>
-
-                {/* 上段：案件の詳細 */}
-                <ProjectDetails projectId={projectId} setLoading={() => {}} />
-
-                {/* 下段：おすすめの研究者リスト */}
-                <MatchedResearchers projectId={projectId} setLoading={() => {}} />
-                
-                {/* 新規登録に戻るリンク */}
-                <div className="mt-8 text-center">
-                    <button
-                        onClick={() => window.location.href = '/register'}
-                        className="text-gray-600 hover:text-gray-800 transition underline"
-                    >
-                        ← 新規登録に戻る
-                    </button>
-                </div>
+        <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg mt-10">
+            {/* 戻るボタン */}
+            <div className="mb-6">
+                <button
+                    onClick={() => window.location.href = '/register'}
+                    className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+                >
+                    ← 登録画面に戻る
+                </button>
             </div>
-        </>
+
+            {/* 上段：案件の詳細 */}
+            <ProjectDetails projectId={projectId} setLoading={() => {}} />
+
+            {/* 下段：おすすめの研究者リスト */}
+            <MatchedResearchers projectId={projectId} setLoading={() => {}} />
+            
+            {/* 新規登録に戻るリンク */}
+            <div className="mt-8 text-center">
+                <button
+                    onClick={() => window.location.href = '/register'}
+                    className="text-gray-600 hover:text-gray-800 transition underline"
+                >
+                    ← 新規登録に戻る
+                </button>
+            </div>
+        </div>
     );
 }
