@@ -15,7 +15,7 @@ export default function UniversitySearchPanel({ value, onChange }: Props) {
   );
 
   const areas = Object.keys(universitiesJson);
-  const universitiesByArea = (area: string) => universitiesJson[area];
+  const universitiesByArea = (area: string) => universitiesJson[area as keyof typeof universitiesJson];
   const allUniversities = Object.values(universitiesJson).flat();
 
   const toggleArea = (area: string) => {
