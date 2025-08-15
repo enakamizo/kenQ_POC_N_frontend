@@ -20,6 +20,7 @@ export default function MatchedResearchers({
   const [selectedResearcher, setSelectedResearcher] = useState<any | null>(null);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [projectTitle, setProjectTitle] = useState("");
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   const router = useRouter();
 
@@ -132,6 +133,36 @@ export default function MatchedResearchers({
   };
 
   // CSV出力
+  // お気に入り機能
+  const handleToggleFavorite = async (researcherId: string) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_AZURE_API_URL}/favorites`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          researcher_id: Number(researcherId),
+          project_id: Number(projectId),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to toggle favorite: ${response.statusText}`);
+      }
+
+      // お気に入り状態を更新
+      setFavorites((prev) =>
+        prev.includes(researcherId)
+          ? prev.filter((id) => id !== researcherId)
+          : [...prev, researcherId]
+      );
+    } catch (error) {
+      console.error("❌ お気に入り切り替えエラー:", error);
+      alert("お気に入りの切り替えに失敗しました。");
+    }
+  };
+
   const handleExportCSV = () => {
     if (researchers.length === 0) return;
 
@@ -211,67 +242,78 @@ export default function MatchedResearchers({
         </button>
       </div>
 
-      <div className="bg-white p-4 rounded-lg shadow-none">
-        <table className="w-full text-sm text-left border-collapse table-fixed">
-          <thead className="bg-gray-100 text-xs">
-            <tr className="border-b">
-              <th className="p-2 w-[125px] whitespace-nowrap text-base">名 前</th>
-              <th className="p-2 min-w-[280px] break-words text-base">所 属</th>
-              <th className="p-2 w-[120px] text-left text-sm">部署<br />職位</th>
-              <th className="p-2 w-[90px] text-center text-sm">研究者<br />情報</th>
-              <th className="p-2 w-[90px] text-center text-sm">マッチング<br />理由</th>
-              <th className="p-2 w-[70px] text-center text-lg">✔</th>
-              <th className="p-2 w-[100px] text-center text-sm">オファー<br />状況</th>
-              <th className="p-2 w-[70px] text-center text-lg">
-                <img src="/Gmail Logo.png" alt="チャット" className="h-5 w-5 mx-auto" />
-              </th>
+      <div className="bg-white rounded-lg border border-gray-200">
+        <table className="w-full text-sm border-collapse">
+          <thead className="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-32">氏名</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[200px]">大学</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-40">学部</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-24">職位</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20">詳細</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-24">マッチング理由</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-16">お気に入り</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-24">オファー状況</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-gray-200">
             {researchers.map((researcher: any) => (
-              <tr key={researcher.researcher_info?.researcher_id || researcher.matching_id} className="border-b">
-                <td className="p-2 break-words max-w-[140px]">{researcher.researcher_info?.name}</td>
-                <td className="p-2 pr-1 break-words whitespace-nowrap text-sm">
+              <tr key={researcher.researcher_info?.researcher_id || researcher.matching_id} className="hover:bg-gray-50">
+                <td className="px-4 py-3 text-gray-900">{researcher.researcher_info?.name}</td>
+                <td className="px-4 py-3 text-gray-700">
                   {researcher.researcher_info?.university}
                 </td>
-                <td className="p-2 pl-1 text-left align-middle text-sm leading-tight break-words max-w-[150px]">
-                  <div className="text-xs text-gray-600 break-words">{researcher.researcher_info?.affiliation || "―"}</div>
-                  <div className="font-medium">{researcher.researcher_info?.position || "―"}</div>
+                <td className="px-4 py-3 text-gray-700">
+                  {researcher.researcher_info?.affiliation || "―"}
                 </td>
-                <td className="p-2 text-center">
-                  <button onClick={() => handleInfoClick(researcher)} className="px-2 py-1 bg-gray-400 text-white rounded hover:bg-gray-500">info</button>
+                <td className="px-4 py-3 text-gray-700">
+                  {researcher.researcher_info?.position || "―"}
                 </td>
-                <td className="p-2 text-center">
-                  <button className="px-2 py-1 bg-gray-400 text-white rounded hover:bg-gray-500" onClick={() => handleShowMatchingReason(researcher.matching_reason)}>why</button>
+                <td className="px-4 py-3 text-center">
+                  <button 
+                    onClick={() => handleInfoClick(researcher)} 
+                    className="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition"
+                  >
+                    詳細
+                  </button>
                 </td>
-                <td className="p-2 text-center">
-                  <input type="checkbox" className="form-checkbox h-5 w-5 border-gray-400 accent-gray-600 rounded focus:ring-gray-500" />
+                <td className="px-4 py-3 text-center">
+                  <button 
+                    className="px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition" 
+                    onClick={() => handleShowMatchingReason(researcher.matching_reason)}
+                  >
+                    理由
+                  </button>
                 </td>
-                <td className="p-2 text-center">
+                <td className="px-4 py-3 text-center">
+                  <button 
+                    onClick={() => handleToggleFavorite(researcher.researcher_info?.researcher_id || researcher.matching_id)}
+                    className={`transition text-lg ${
+                      favorites.includes(researcher.researcher_info?.researcher_id || researcher.matching_id)
+                        ? "text-red-500 hover:text-red-600"
+                        : "text-gray-400 hover:text-red-500"
+                    }`}
+                  >
+                    {favorites.includes(researcher.researcher_info?.researcher_id || researcher.matching_id) ? "♥" : "♡"}
+                  </button>
+                </td>
+                <td className="px-4 py-3 text-center">
                   {researcher.matching_status === 0 && (
                     <button
                       onClick={() => handleCheckboxChange(researcher.researcher_info?.researcher_id || researcher.matching_id)}
-                      className={`px-2 py-1 text-sm text-white rounded hover:opacity-90 ${
+                      className={`px-3 py-1 text-xs text-white rounded transition ${
                         selectedResearchers.includes(researcher.researcher_info?.researcher_id || researcher.matching_id)
-                          ? "bg-gray-500"
-                          : "bg-gray-400 hover:bg-gray-500"
+                          ? "bg-gray-600"
+                          : "bg-gray-500 hover:bg-gray-600"
                       }`}
                     >
                       オファー
                     </button>
                   )}
-
-                  {researcher.matching_status === 1 && <span className="text-gray-500">オファー中</span>}
-                  {researcher.matching_status === 2 && <span className="text-green-600 font-bold">成立</span>}
-                  {researcher.matching_status === 3 && <span className="text-gray-500">不成立</span>}
-                  {researcher.matching_status === 4 && <span className="text-blue-600">オファー有</span>}
-                </td>
-                <td className="p-2 text-center">
-                  {researcher.matching_status === 2 && researcher.chat_id && (
-                    <a href={`/chat/${researcher.chat_id}`} className="text-xl">
-                      {researcher.hasNewMessage ? "📩" : "✉"}
-                    </a>
-                  )}
+                  {researcher.matching_status === 1 && <span className="text-orange-500 text-xs">オファー中</span>}
+                  {researcher.matching_status === 2 && <span className="text-green-600 font-medium text-xs">成立</span>}
+                  {researcher.matching_status === 3 && <span className="text-gray-500 text-xs">不成立</span>}
+                  {researcher.matching_status === 4 && <span className="text-blue-600 text-xs">オファー有</span>}
                 </td>
               </tr>
             ))}

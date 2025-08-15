@@ -79,49 +79,44 @@ export default function ProjectDetails({
   console.log("ProjectDetails - render時のproject:", project);
 
   return (
-    <div className="p-6 bg-white rounded-lg">
-      <h2 className="text-3xl font-bold mb-4">{project.title}</h2>
+    <div className="mb-8">
+      {/* 案件タイトル - 赤文字で大きく */}
+      <h1 className="text-2xl font-bold text-red-600 mb-6">{project.title}</h1>
 
-      <div className="bg-white p-6 rounded-lg border border-gray-300">
-        <div className="mb-4">
-          <p className="text-gray-600 text-sm">カテゴリ</p>
-          <p className="font-medium">{project.category}</p>
+      {/* 案件内容セクション */}
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-3">案件内容</h2>
+        <div className="bg-gray-50 p-4 rounded-lg border">
+          <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{project.background}</p>
+        </div>
+      </div>
+
+      {/* 詳細情報 - 2列レイアウト */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* 左列 */}
+        <div>
+          <div className="mb-4">
+            <h3 className="text-sm font-semibold text-gray-600 mb-1">業種</h3>
+            <p className="text-gray-800">{project.industry}</p>
+          </div>
+          
+          <div className="mb-4">
+            <h3 className="text-sm font-semibold text-gray-600 mb-1">大学</h3>
+            <p className="text-gray-800">全大学 (118校)</p>
+          </div>
         </div>
 
-        <div className="mb-4">
-          <p className="text-gray-600 text-sm">案件内容</p>
-          <p className="font-medium whitespace-pre-wrap">{project.background}</p>
-        </div>
-
-        <div className="mb-4">
-          <p className="text-gray-600 text-sm">業種</p>
-          <p className="font-medium">{project.industry}</p>
-        </div>
-
-        <div className="mb-4">
-          <p className="text-gray-600 text-sm">事業内容</p>
-          <p className="font-medium">{project.businessDescription}</p>
-        </div>
-
-        <div className="mb-4">
-          <p className="text-gray-600 text-sm">研究分野</p>
-          <p className="font-medium">{project.researchField || '指定なし'}</p>
-        </div>
-
-        <div className="mb-4">
-          <p className="text-gray-600 text-sm">研究者階層</p>
-          <p className="font-medium">
-            {Array.isArray(project.preferred_researcher_level)
-              ? project.preferred_researcher_level.join(" / ")
-              : project.preferred_researcher_level?.split(",").map((level: string) => level.trim()).join(" / ")}
-          </p>
-        </div>
-
-        <div className="mb-4">
-          <p className="text-gray-600 text-sm">募集期限</p>
-          <p className="font-medium text-base">
-            {project.application_deadline?.split("T")[0]}
-          </p>
+        {/* 右列 */}
+        <div>
+          <div className="mb-4">
+            <h3 className="text-sm font-semibold text-gray-600 mb-1">事業内容</h3>
+            <p className="text-gray-800">{project.businessDescription}</p>
+          </div>
+          
+          <div className="mb-4">
+            <h3 className="text-sm font-semibold text-gray-600 mb-1">研究者階層</h3>
+            <p className="text-gray-800">教授／准教授／助教／講師／助教授／助手／研究員／特任教授／特任助教／主任研究員</p>
+          </div>
         </div>
       </div>
     </div>
