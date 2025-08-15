@@ -31,6 +31,7 @@ export default function MatchedResearchers({
         if (storedData) {
           const data = JSON.parse(storedData);
           console.log("MatchedResearchers - 研究者データ:", data.matchingResults.matched_researchers);
+          console.log("MatchedResearchers - 研究者数:", data.matchingResults.matched_researchers?.length);
           setResearchers(data.matchingResults.matched_researchers || []);
           setProjectTitle(data.projectData.title || "");
           setLoading(false);
@@ -194,6 +195,9 @@ export default function MatchedResearchers({
     link.click();
     document.body.removeChild(link);
   };
+
+  console.log("MatchedResearchers - render時のresearchers:", researchers);
+  console.log("MatchedResearchers - render時の研究者数:", researchers.length);
 
   return (
     <div className="relative mb-4 mt-6">
