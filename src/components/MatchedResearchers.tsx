@@ -30,6 +30,7 @@ export default function MatchedResearchers({
         const storedData = localStorage.getItem(`project_${projectId}`);
         if (storedData) {
           const data = JSON.parse(storedData);
+          console.log("MatchedResearchers - 研究者データ:", data.matchingResults.matched_researchers);
           setResearchers(data.matchingResults.matched_researchers || []);
           setProjectTitle(data.projectData.title || "");
           setLoading(false);

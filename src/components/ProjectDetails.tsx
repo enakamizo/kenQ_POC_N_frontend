@@ -20,6 +20,7 @@ export default function ProjectDetails({
         const storedData = localStorage.getItem(`project_${projectId}`);
         if (storedData) {
           const data = JSON.parse(storedData);
+          console.log("ProjectDetails - 取得したデータ:", data.projectData);
           setProject(data.projectData);
           setLoading(false);
           return;
@@ -75,24 +76,36 @@ export default function ProjectDetails({
     );
   }
 
+  console.log("ProjectDetails - render時のproject:", project);
+
   return (
     <div className="p-6 bg-white rounded-lg">
-      <h2 className="text-3xl font-bold mb-4">{project.project_title}</h2>
+      <h2 className="text-3xl font-bold mb-4">{project.title}</h2>
 
       <div className="bg-white p-6 rounded-lg border border-gray-300">
         <div className="mb-4">
           <p className="text-gray-600 text-sm">カテゴリ</p>
-          <p className="font-medium">{project.consultation_category}</p>
+          <p className="font-medium">{project.category}</p>
         </div>
 
         <div className="mb-4">
           <p className="text-gray-600 text-sm">案件内容</p>
-          <p className="font-medium whitespace-pre-wrap">{project.project_content}</p>
+          <p className="font-medium whitespace-pre-wrap">{project.background}</p>
+        </div>
+
+        <div className="mb-4">
+          <p className="text-gray-600 text-sm">業種</p>
+          <p className="font-medium">{project.industry}</p>
+        </div>
+
+        <div className="mb-4">
+          <p className="text-gray-600 text-sm">事業内容</p>
+          <p className="font-medium">{project.businessDescription}</p>
         </div>
 
         <div className="mb-4">
           <p className="text-gray-600 text-sm">研究分野</p>
-          <p className="font-medium">{project.research_field}</p>
+          <p className="font-medium">{project.researchField || '指定なし'}</p>
         </div>
 
         <div className="mb-4">
