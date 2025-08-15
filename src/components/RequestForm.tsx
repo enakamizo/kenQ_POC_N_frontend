@@ -226,8 +226,23 @@ export default function RequestForm({ onSubmit }: RequestFormProps) {
       const result = await response.json();
       console.log("Project registration result:", result);
       
-      setProjectId(result.project_id || result.id);
+      const projectId = result.project_id || result.id;
+      setProjectId(projectId);
       setResearchResults(result);
+      
+      // マッチング結果をlocalStorageに保存
+      localStorage.setItem(`project_${projectId}`, JSON.stringify({
+        projectData: {
+          id: projectId,
+          title: localFormData.title,
+          background: localFormData.background,
+          industry: localFormData.industry,
+          businessDescription: localFormData.businessDescription,
+          category: localFormData.category,
+          researchField: localFormData.researchField
+        },
+        matchingResults: result
+      }));
       
       // リサーチ完了状態に移行（実際はバックエンドの処理完了を待つ）
       setTimeout(() => {
