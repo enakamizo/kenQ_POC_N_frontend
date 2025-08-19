@@ -27,11 +27,22 @@ export default function LoginPage() {
       const result = await signIn("credentials", {
         company_user_name: companyUserName,
         password,
-        redirect: true, // NextAuthに遷移を任せる
+        redirect: false, // 結果を確認するためredirectをfalseに
         callbackUrl,
       });
 
       console.log("signIn result:", result);
+
+      if (result?.error) {
+        if (result.error === "CredentialsSignin") {
+          setError("UserIDかPasswordが間違っています");
+        } else {
+          setError("エラーが発生しました。もう一度お試しください。");
+        }
+      } else if (result?.ok) {
+        // 認証成功時はリダイレクト
+        router.push(callbackUrl);
+      }
     } catch (err) {
       console.error("Login error:", err);
       setError("エラーが発生しました。もう一度お試しください。");
