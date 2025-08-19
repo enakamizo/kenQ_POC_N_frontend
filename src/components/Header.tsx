@@ -2,25 +2,20 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 
 const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  const [username, setUsername] = useState("ユーザー");
+  const { data: session } = useSession();
+  
+  const username = session?.user?.company_user_name || "ユーザー";
 
-  useEffect(() => {
-    // localStorageやセッションからユーザー名を取得
-    const storedUsername = localStorage.getItem("username") || localStorage.getItem("user_id") || "ユーザー";
-    setUsername(storedUsername);
-  }, []);
-
-  const handleLogout = () => {
-    // ログアウト処理（localStorageクリアなど）
-    localStorage.clear();
-    // ログイン画面に遷移
-    router.push("/login");
+  const handleLogout = async () => {
+    // NextAuthのログアウト処理
+    await signOut({ callbackUrl: "/login" });
   };
 
   return (

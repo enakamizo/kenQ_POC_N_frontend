@@ -7,12 +7,14 @@ declare module "next-auth" {
     user: {
       id: string;
       name: string;
+      company_user_name?: string;
     };
   }
 
   interface User {
     id: string;
     name: string;
+    company_user_name?: string;
   }
 }
 
@@ -20,6 +22,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     name: string;
+    company_user_name?: string;
   }
 }
 
@@ -43,7 +46,11 @@ export const authOptions: NextAuthOptions = {
 
           const user = res.data;
           if (user) {
-            return { id: user.id, name: user.name };
+            return { 
+              id: user.id, 
+              name: user.name, 
+              company_user_name: credentials?.company_user_name 
+            };
           }
           return null;
         } catch (error) {
@@ -67,6 +74,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.name = user.name;
+        token.company_user_name = user.company_user_name;
       }
       return token;
     },
@@ -74,6 +82,7 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.id;
         session.user.name = token.name;
+        session.user.company_user_name = token.company_user_name;
       }
       return session;
     },
