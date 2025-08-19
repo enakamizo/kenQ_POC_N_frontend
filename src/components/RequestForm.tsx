@@ -181,8 +181,19 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setLocalFormData((prev) => ({ ...prev, [name]: value }));
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // 文字数制限チェック
+    let processedValue = value;
+    if (name === 'title' && value.length > 40) {
+      processedValue = value.slice(0, 40);
+    } else if (name === 'background' && value.length > 1000) {
+      processedValue = value.slice(0, 1000);
+    } else if (name === 'businessDescription' && value.length > 100) {
+      processedValue = value.slice(0, 100);
+    }
+    
+    setLocalFormData((prev) => ({ ...prev, [name]: processedValue }));
+    setFormData((prev) => ({ ...prev, [name]: processedValue }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
