@@ -66,7 +66,7 @@ export default function LoginPage() {
         </div>
 
         {/* ログインフォーム */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
           {/* エラーメッセージ */}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
@@ -82,6 +82,9 @@ export default function LoginPage() {
               onChange={(e) => setCompanyUserName(e.target.value)}
               placeholder="User ID"
               className="w-full px-4 py-4 border border-gray-200 rounded-lg bg-white text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent"
+              autoComplete="username"
+              name="company_user_name"
+              id="company_user_name"
               required
             />
           </div>
@@ -93,8 +96,10 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
-              className="w-full px-4 py-4 pr-12 border border-gray-200 rounded-lg bg-white text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent"
-              autoComplete="current-password"
+              className="w-full px-4 py-4 pr-12 border border-gray-200 rounded-lg bg-white text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent [&::-ms-reveal]:hidden [&::-ms-clear]:hidden"
+              autoComplete="new-password"
+              name="password"
+              id="password"
               required
             />
             <button
