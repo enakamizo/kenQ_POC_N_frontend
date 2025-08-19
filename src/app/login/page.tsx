@@ -4,12 +4,14 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 export default function LoginPage() {
   const [companyUserName, setCompanyUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -74,15 +76,26 @@ export default function LoginPage() {
           </div>
 
           {/* Password */}
-          <div>
+          <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
-              className="w-full px-4 py-4 border border-gray-200 rounded-lg bg-white text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent"
+              className="w-full px-4 py-4 pr-12 border border-gray-200 rounded-lg bg-white text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent"
               required
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="h-5 w-5" />
+              ) : (
+                <EyeIcon className="h-5 w-5" />
+              )}
+            </button>
           </div>
 
           {/* Log In Button */}
