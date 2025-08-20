@@ -186,8 +186,8 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
     let processedValue = value;
     if (name === 'title' && value.length > 40) {
       processedValue = value.slice(0, 40);
-    } else if (name === 'background' && value.length > 1000) {
-      processedValue = value.slice(0, 1000);
+    } else if (name === 'background' && value.length > 2000) {
+      processedValue = value.slice(0, 2000);
     } else if (name === 'businessDescription' && value.length > 100) {
       processedValue = value.slice(0, 100);
     }
@@ -483,19 +483,19 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
 
       {/* 案件内容 */}
       <div>
-        <label className="block text-sm font-medium mb-1">案件内容（1000文字以内）<span className="text-red-500">*</span></label>
+        <label className="block text-sm font-medium mb-1">案件内容（2000文字以内）<span className="text-red-500">*</span></label>
         <textarea
           name="background"
           value={localFormData.background}
           onChange={handleChange}
           placeholder="案件内容を記載してください"
-          maxLength={1000}
+          maxLength={2000}
           className="w-full p-2 border border-gray-300 rounded-lg"
-          rows={4}
+          rows={10}
         />
         <div className="text-right -mt-1 mb-2">
           <span className="text-xs text-gray-400">
-            {localFormData.background.length}/1000文字
+            {localFormData.background.length}/2000文字
           </span>
         </div>
       </div>
@@ -630,7 +630,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-sm font-medium text-gray-700">提案案件内容</label>
                   <span className="text-xs text-gray-400">
-                    {diagnosisResult?.length || 0}/1000文字
+                    {diagnosisResult?.length || 0}/2000文字
                   </span>
                 </div>
                 <div className="border border-gray-300 rounded-lg p-3 bg-gray-50 max-h-60 overflow-y-auto">
