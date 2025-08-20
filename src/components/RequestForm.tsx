@@ -12,7 +12,6 @@ const allResearcherLevels = [
 ];
 
 type FormDataType = {
-  category: string;
   title: string;
   background: string;
   industry: string;        // ✅追加
@@ -33,7 +32,6 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
   const { formData, setFormData } = useFormContext();
 
   const initialData: FormDataType = {
-    category: "",
     title: "",
     background: "",
     industry: "",
@@ -93,15 +91,12 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
   }, [isResearching, showConfirmModal, loading, researchCompleted, onStatusChange]);
 
   const handleDiagnosis = () => {
-    // 必須5項目の簡易バリデーション
+    // 案件タイトルと案件内容のみ必須チェック
     if (
-      !localFormData.category ||
       !localFormData.title ||
-      !localFormData.background ||
-      !localFormData.industry ||
-      !localFormData.businessDescription
+      !localFormData.background
     ) {
-      setValidationError("必須項目（上段5項目）をすべて入力してください。");
+      setValidationError("案件タイトルと案件内容の両方を入力してから案件入力AIアシストをご利用ください。");
       return;
     }
 
@@ -140,7 +135,6 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          consultation_category: localFormData.category,
           project_title: localFormData.title,
           project_content: localFormData.background,
           industry: localFormData.industry,
@@ -205,7 +199,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
     }
 
     // 必須項目のバリデーション
-    if (!localFormData.category || !localFormData.title || !localFormData.background) {
+    if (!localFormData.title || !localFormData.background) {
       setValidationError("必須項目を入力してください。");
       return;
     }
@@ -255,7 +249,6 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
           background: localFormData.background,
           industry: localFormData.industry,
           businessDescription: localFormData.businessDescription,
-          category: localFormData.category,
           researchField: localFormData.researchField
         },
         matchingResults: result
@@ -441,26 +434,8 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
   return (
     <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg">
 
-      {/* === 上段ブロック: カテゴリー〜AI課題診断 === */}
+      {/* === 上段ブロック: AI課題診断 === */}
       <div className="bg-gray-50 p-6 rounded-lg shadow-md space-y-6 border border-blue-300">
-        {/* 依頼のカテゴリー */}
-        <div>
-          <label className="block text-sm font-medium mb-1">依頼カテゴリー <span className="text-red-500">*</span></label>
-          <div className="space-y-2">
-            {["ヒアリング", "壁打ち", "共同研究開発"].map((option) => (
-              <label key={option} className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="category"
-                  value={option}
-                  onChange={handleChange}
-                  checked={localFormData.category === option}
-                />
-                <span>{option}</span>
-              </label>
-            ))}
-          </div>
-        </div>
 
         {/* 案件のタイトル */}
         <div>
@@ -698,7 +673,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
         {validationError && (
           <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
-              <p className="text-lg font-medium mb-4">{validationError}</p>
+              <p className="text-lg font-medium mb-4 text-red-600">{validationError}</p>
               <button
                 className="px-4 py-2 bg-blue-400 text-white font-semibold rounded hover:bg-blue-500"
                 onClick={() => setValidationError(null)}
