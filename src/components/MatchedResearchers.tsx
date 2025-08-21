@@ -305,13 +305,13 @@ export default function MatchedResearchers({
         <table className="w-full text-sm border-collapse">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-32">氏名</th>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[200px]">所属</th>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-40">学部</th>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-24">職位</th>
-              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20">研究者情報</th>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[300px]">マッチング理由</th>
-              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-16">お気に入り</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-32 whitespace-nowrap">氏名</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[200px] whitespace-nowrap">所属</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-40 whitespace-nowrap">学部</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-24 whitespace-nowrap">職位</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-28 whitespace-nowrap">研究者情報</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[300px] whitespace-nowrap">マッチング理由</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20 whitespace-nowrap">お気に入り</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -332,9 +332,12 @@ export default function MatchedResearchers({
                     href={`https://nrid.nii.ac.jp/ja/nrid/1${(researcher.researcher_info?.researcher_id || researcher.matching_id).toString().padStart(12, '0')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition"
+                    className="inline-flex items-center px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition whitespace-nowrap"
                   >
                     プロフィール
+                    <svg className="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
                   </a>
                 </td>
                 <td className="px-4 py-3 text-gray-700 text-sm">
