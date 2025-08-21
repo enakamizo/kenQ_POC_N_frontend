@@ -143,7 +143,6 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
           university: Array.isArray(formData.university)
             ? formData.university
             : formData.university ? [formData.university] : [],
-          research_field: localFormData.researchField || "",
           preferred_researcher_level: Array.isArray(formData.researcherLevel)
             ? formData.researcherLevel
             : formData.researcherLevel ? [formData.researcherLevel] : [],
@@ -199,8 +198,14 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
     }
 
     // 必須項目のバリデーション
-    if (!localFormData.title || !localFormData.background) {
-      setValidationError("必須項目を入力してください。");
+    const missingFields = [];
+    if (!localFormData.title) missingFields.push("案件タイトル");
+    if (!localFormData.background) missingFields.push("案件内容");
+    if (!formData.university || formData.university.length === 0) missingFields.push("大学");
+    if (!formData.researcherLevel || formData.researcherLevel.length === 0) missingFields.push("研究者階層");
+
+    if (missingFields.length > 0) {
+      setValidationError(`必須項目を入力してください：${missingFields.join("、")}`);
       return;
     }
 
@@ -248,8 +253,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
           title: localFormData.title,
           background: localFormData.background,
           industry: localFormData.industry,
-          businessDescription: localFormData.businessDescription,
-          researchField: localFormData.researchField
+          businessDescription: localFormData.businessDescription
         },
         matchingResults: result
       }));
@@ -316,7 +320,6 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
               <div>
                 <p><span className="font-medium">対象大学:</span> {researchResults.university?.length || 0}校</p>
-                <p><span className="font-medium">研究分野:</span> {localFormData.researchField || '指定なし'}</p>
               </div>
               <div>
                 <p><span className="font-medium">研究者階層:</span> {researchResults.level?.length || 0}項目</p>
@@ -392,7 +395,6 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
             <h3 className="text-blue-600 font-medium mb-2">{localFormData.title}</h3>
             <div className="text-sm text-gray-600 space-y-1">
               <p><span className="font-medium">対象大学:</span> {Array.isArray(formData.university) ? formData.university.length : 0}校</p>
-              <p><span className="font-medium">研究分野:</span> {localFormData.researchField || '指定なし'}</p>
               <p><span className="font-medium">研究者階層:</span> {Array.isArray(formData.researcherLevel) ? formData.researcherLevel.length : 0}項目</p>
             </div>
           </div>
@@ -690,7 +692,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
       {/* === 下段ブロック: 大学〜確認ボタン === */}
       {/* 大学 */}
       <div>
-        <label className="block text-sm font-medium mb-1">大学</label>
+        <label className="block text-sm font-medium mb-1">大学 <span className="text-red-500">*</span></label>
         <div className="p-4 rounded-lg border border-gray-300">
           <UniversitySelect
             value={formData.university || []}
@@ -707,29 +709,6 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
         </div>
       </div>
 
-     {/* 研究分野 */}
-      <div>
-        <label className="block text-sm font-medium mb-1">研究分野</label>
-        <select
-          name="researchField"
-          value={localFormData.researchField}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-lg"
-        >
-          <option value="">選択してください</option>
-          <option value="ライフサイエンス">ライフサイエンス</option>
-          <option value="情報通信">情報通信</option>
-          <option value="環境・農学">環境・農学</option>
-          <option value="ナノテク・材料">ナノテク・材料</option>
-          <option value="エネルギー">エネルギー</option>
-          <option value="ものづくり技術">ものづくり技術</option>
-          <option value="社会基盤">社会基盤</option>
-          <option value="フロンティア">フロンティア</option>
-          <option value="人文・社会">人文・社会</option>
-          <option value="自然科学一般">自然科学一般</option>
-          <option value="その他">その他</option>
-        </select>
-      </div>
 
       {/* 研究者階層 */}
       <div>
