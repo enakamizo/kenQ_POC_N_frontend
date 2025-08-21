@@ -61,10 +61,6 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
                 // 選択を解除
                 return prev.filter((u) => u !== univ);
             } else {
-                // エリア選択時は20校制限をチェック
-                if (selectionMode === 'regions' && prev.length >= 20) {
-                    return prev; // 20校を超える場合は追加しない
-                }
                 return [...prev, univ];
             }
         });
@@ -112,12 +108,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
                 // 地域の選択を解除
                 universities.forEach((u) => newSelected.delete(u));
             } else {
-                // 地域を選択（20校制限をチェック）
-                const newUniversities = universities.filter(u => !newSelected.has(u));
-                if (selectionMode === 'regions' && newSelected.size + newUniversities.length > 20) {
-                    // 20校を超える場合は追加しない
-                    return Array.from(newSelected);
-                }
+                // 地域を選択
                 universities.forEach((u) => newSelected.add(u));
             }
             return Array.from(newSelected);
@@ -182,24 +173,13 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
                             onChange={handleSelectRegions}
                             className="w-4 h-4"
                         />
-                        <span>エリアから選択（20校まで）</span>
+                        <span>エリアから選択</span>
                     </label>
                 </div>
 
                 {/* エリア選択の詳細表示 */}
                 {selectionMode === 'regions' && (
                     <div className="ml-6 mt-3 bg-white p-4 rounded border max-h-96 overflow-y-auto">
-                        {/* 20校制限の警告メッセージ */}
-                        {selectedUniversities.length >= 20 && (
-                            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded flex items-center">
-                                <div className="w-4 h-4 border border-red-400 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
-                                    <span className="text-red-600 text-xs">!</span>
-                                </div>
-                                <span className="text-sm text-red-700">
-                                    エリア選択時は20校までしか選択できません。現在の選択数: {selectedUniversities.length}校
-                                </span>
-                            </div>
-                        )}
                         {Object.entries(universitiesBySubregion).map(([region, universities]) => {
                             const allRegionSelected = universities.every((u) =>
                                 selectedUniversities.includes(u)
@@ -219,14 +199,12 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
                                     <div className="ml-6 grid grid-cols-3 gap-x-4 gap-y-1">
                                         {universities.map((univ) => {
                                             const isSelected = selectedUniversities.includes(univ);
-                                            const isDisabled = !isSelected && selectedUniversities.length >= 20;
                                             return (
-                                                <label key={univ} className={`flex items-center space-x-2 text-xs ${isDisabled ? 'text-gray-400' : ''}`}>
+                                                <label key={univ} className="flex items-center space-x-2 text-xs">
                                                     <input
                                                         type="checkbox"
                                                         checked={isSelected}
                                                         onChange={() => handleToggleUniversity(univ)}
-                                                        disabled={isDisabled}
                                                         className="w-3 h-3"
                                                     />
                                                     <span>{univ}</span>
@@ -245,11 +223,6 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
             <div className="mt-6 pt-4 border-t border-gray-300">
                 <p className="text-sm font-medium">
                     選択された大学: {selectedUniversities.length}校
-                    {selectionMode === 'regions' && (
-                        <span className="ml-2 text-green-600">
-                            （20校まであと{Math.max(0, 20 - selectedUniversities.length)}校）
-                        </span>
-                    )}
                 </p>
             </div>
         </div>
