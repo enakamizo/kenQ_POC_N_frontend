@@ -23,6 +23,7 @@ export default function MatchedResearchers({
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showFavoriteConfirm, setShowFavoriteConfirm] = useState(false);
   const [showFavoriteSuccess, setShowFavoriteSuccess] = useState(false);
+  const [expandedReasons, setExpandedReasons] = useState<string[]>([]);
 
   const router = useRouter();
 
@@ -135,6 +136,15 @@ export default function MatchedResearchers({
   };
 
   // CSV出力
+  // マッチング理由の展開/折りたたみ
+  const toggleReasonExpansion = (researcherId: string) => {
+    setExpandedReasons(prev => 
+      prev.includes(researcherId) 
+        ? prev.filter(id => id !== researcherId)
+        : [...prev, researcherId]
+    );
+  };
+
   // ローカルお気に入り選択切り替え（☆ボタン用）
   const handleToggleFavoriteLocal = (researcherId: string) => {
     console.log("🌟 ローカルお気に入り切り替え - researcher_id:", researcherId);
@@ -288,7 +298,7 @@ export default function MatchedResearchers({
   return (
     <div className="relative mb-4 mt-6">
       <div className="pl-6">
-        <h3 className="text-xl font-bold">おすすめの研究者リスト</h3>
+        <h3 className="text-xl font-bold">研究者一覧</h3>
       </div>
 
       <div className="bg-white rounded-lg border border-gray-200">
@@ -299,7 +309,7 @@ export default function MatchedResearchers({
               <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[200px]">大学</th>
               <th className="px-4 py-3 text-left font-semibold text-gray-700 w-40">学部</th>
               <th className="px-4 py-3 text-left font-semibold text-gray-700 w-24">職位</th>
-              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20">詳細</th>
+              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20">研究者情報</th>
               <th className="px-4 py-3 text-center font-semibold text-gray-700 w-24">マッチング理由</th>
               <th className="px-4 py-3 text-center font-semibold text-gray-700 w-16">お気に入り</th>
             </tr>
@@ -324,21 +334,35 @@ export default function MatchedResearchers({
                     rel="noopener noreferrer"
                     className="inline-block px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition"
                   >
-                    詳細
+                    プロフィール
                   </a>
                 </td>
-                <td className="px-4 py-3 text-center">
-                  <button 
-                    className="px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition" 
-                    onClick={() => handleShowMatchingReason(
-                      researcher.researcher_info?.explanation || 
-                      researcher.explanation || 
-                      researcher.matching_reason || 
-                      "マッチング理由が見つかりません"
-                    )}
-                  >
-                    理由
-                  </button>
+                <td className="px-4 py-3 text-gray-700 text-sm">
+                  {(() => {
+                    const researcherId = (researcher.researcher_info?.researcher_id || researcher.matching_id).toString();
+                    const fullReason = researcher.researcher_info?.explanation || 
+                                     researcher.explanation || 
+                                     researcher.matching_reason || 
+                                     "―";
+                    const isExpanded = expandedReasons.includes(researcherId);
+                    const previewText = fullReason.length > 50 ? fullReason.substring(0, 50) + "..." : fullReason;
+                    
+                    return (
+                      <div className="relative">
+                        <div className="flex items-center">
+                          <span>{isExpanded ? fullReason : previewText}</span>
+                          {fullReason.length > 50 && (
+                            <button
+                              onClick={() => toggleReasonExpansion(researcherId)}
+                              className="ml-2 text-blue-500 hover:text-blue-700 transition text-xs"
+                            >
+                              {isExpanded ? "−" : "＋"}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </td>
                 <td className="px-4 py-3 text-center">
                   <button 
