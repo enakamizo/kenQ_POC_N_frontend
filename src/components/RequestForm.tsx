@@ -693,13 +693,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
         <label className="block text-sm font-medium mb-1">大学</label>
         <div className="p-4 rounded-lg border border-gray-300">
           <UniversitySelect
-            value={
-              Array.isArray(formData.university) &&
-              formData.university.length === 1 &&
-              formData.university[0] === "全大学"
-                ? Object.values(universitiesBySubregion).flat()
-                : formData.university || []
-            }
+            value={formData.university || []}
             onChange={(value) => {
               const allUniversityNames = Object.values(universitiesBySubregion).flat();
               const isAllSelected = value.length === allUniversityNames.length;
@@ -707,7 +701,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
 
               setFormData({ ...formData, university: updated });
               setLocalFormData((prev) => ({ ...prev, university: updated }));
-              setSelectedUniversities(updated);
+              setSelectedUniversities(value); // Use the actual selected universities, not the compressed format
             }}
           />
         </div>

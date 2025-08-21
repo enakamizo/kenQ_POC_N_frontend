@@ -15,8 +15,37 @@ const favoriteUniversities = [
 
 export default function UniversitySelect({ value, onChange }: UniversitySelectProps) {
     const allUniversities = Object.values(universitiesBySubregion).flat();
-    const [selectedUniversities, setSelectedUniversities] = useState<string[]>(value || []);
-    const [selectionMode, setSelectionMode] = useState<'none' | 'all' | 'favorites' | 'regions'>('none');
+    
+    // Initialize state based on the value prop
+    const getInitialState = () => {
+        if (value?.includes("全大学")) {
+            return {
+                selectedUniversities: allUniversities,
+                selectionMode: 'all' as const
+            };
+        }
+        return {
+            selectedUniversities: value || [],
+            selectionMode: 'none' as const
+        };
+    };
+    
+    const initialState = getInitialState();
+    const [selectedUniversities, setSelectedUniversities] = useState<string[]>(initialState.selectedUniversities);
+    const [selectionMode, setSelectionMode] = useState<'none' | 'all' | 'favorites' | 'regions'>(initialState.selectionMode);
+
+    // Handle value prop changes from parent
+    useEffect(() => {
+        if (value?.includes("全大学") && selectionMode !== 'all') {
+            setSelectedUniversities(allUniversities);
+            setSelectionMode('all');
+        } else if (!value?.includes("全大学") && value) {
+            setSelectedUniversities(value);
+            if (selectionMode === 'all') {
+                setSelectionMode('none');
+            }
+        }
+    }, [value]);
 
     useEffect(() => {
         const allSelected = allUniversities.every((u) => selectedUniversities.includes(u));
@@ -56,18 +85,11 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
         const isFavoritesSelected = selectionMode === 'favorites';
         if (isFavoritesSelected) {
             setSelectionMode('none');
-            // お気に入り大学の選択を解除
-            setSelectedUniversities(prev => 
-                prev.filter(univ => !favoriteUniversities.includes(univ))
-            );
+            setSelectedUniversities([]);
         } else {
             setSelectionMode('favorites');
-            // お気に入り大学をすべて選択
-            setSelectedUniversities(prev => {
-                const newSelected = new Set(prev);
-                favoriteUniversities.forEach(univ => newSelected.add(univ));
-                return Array.from(newSelected);
-            });
+            // Clear previous selections and set only favorite universities
+            setSelectedUniversities(favoriteUniversities);
         }
     };
 
@@ -75,8 +97,10 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
         const isRegionsSelected = selectionMode === 'regions';
         if (isRegionsSelected) {
             setSelectionMode('none');
+            setSelectedUniversities([]);
         } else {
             setSelectionMode('regions');
+            setSelectedUniversities([]);
         }
     };
 
