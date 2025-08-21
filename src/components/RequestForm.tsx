@@ -394,7 +394,11 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
             <h2 className="text-lg font-semibold text-blue-800 mb-4">リサーチ中の案件</h2>
             <h3 className="text-blue-600 font-medium mb-2">{localFormData.title}</h3>
             <div className="text-sm text-gray-600 space-y-1">
-              <p><span className="font-medium">対象大学:</span> {Array.isArray(formData.university) ? formData.university.length : 0}校</p>
+              <p><span className="font-medium">対象大学:</span> {
+                Array.isArray(formData.university) && formData.university.includes("全大学")
+                  ? `全大学（${Object.values(universitiesBySubregion).flat().length}校）`
+                  : `${Array.isArray(formData.university) ? formData.university.length : 0}校`
+              }</p>
               <p><span className="font-medium">研究者階層:</span> {Array.isArray(formData.researcherLevel) ? formData.researcherLevel.length : 0}項目</p>
             </div>
           </div>
