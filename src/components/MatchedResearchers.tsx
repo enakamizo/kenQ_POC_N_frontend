@@ -306,11 +306,11 @@ export default function MatchedResearchers({
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-4 py-3 text-left font-semibold text-gray-700 w-32">氏名</th>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[200px]">大学</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[200px]">所属</th>
               <th className="px-4 py-3 text-left font-semibold text-gray-700 w-40">学部</th>
               <th className="px-4 py-3 text-left font-semibold text-gray-700 w-24">職位</th>
               <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20">研究者情報</th>
-              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-24">マッチング理由</th>
+              <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[300px]">マッチング理由</th>
               <th className="px-4 py-3 text-center font-semibold text-gray-700 w-16">お気に入り</th>
             </tr>
           </thead>
@@ -345,16 +345,16 @@ export default function MatchedResearchers({
                                      researcher.matching_reason || 
                                      "―";
                     const isExpanded = expandedReasons.includes(researcherId);
-                    const previewText = fullReason.length > 50 ? fullReason.substring(0, 50) + "..." : fullReason;
+                    const previewText = fullReason.length > 20 ? fullReason.substring(0, 20) + "..." : fullReason;
                     
                     return (
                       <div className="relative">
-                        <div className="flex items-center">
-                          <span>{isExpanded ? fullReason : previewText}</span>
-                          {fullReason.length > 50 && (
+                        <div className="flex items-center whitespace-nowrap">
+                          <span className={isExpanded ? "whitespace-pre-wrap" : "whitespace-nowrap"}>{isExpanded ? fullReason : previewText}</span>
+                          {fullReason.length > 20 && (
                             <button
                               onClick={() => toggleReasonExpansion(researcherId)}
-                              className="ml-2 text-blue-500 hover:text-blue-700 transition text-xs"
+                              className="ml-2 text-blue-500 hover:text-blue-700 transition text-xs flex-shrink-0"
                             >
                               {isExpanded ? "−" : "＋"}
                             </button>
