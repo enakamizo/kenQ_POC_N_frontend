@@ -301,46 +301,46 @@ export default function MatchedResearchers({
         <h3 className="text-xl font-bold">研究者一覧</h3>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200">
-        <table className="w-full text-sm border-collapse">
+      <div className="bg-white rounded-lg border border-gray-200 overflow-x-auto">
+        <table className="w-full text-sm border-collapse table-fixed">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-32 whitespace-nowrap">氏名</th>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[200px] whitespace-nowrap">所属</th>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-40 whitespace-nowrap">学部</th>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700 w-24 whitespace-nowrap">職位</th>
-              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-28 whitespace-nowrap">研究者情報</th>
-              <th className="px-4 py-3 text-left font-semibold text-gray-700 min-w-[300px] whitespace-nowrap">マッチング理由</th>
-              <th className="px-4 py-3 text-center font-semibold text-gray-700 w-20 whitespace-nowrap">お気に入り</th>
+              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-20 whitespace-nowrap">氏名</th>
+              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-32 whitespace-nowrap">所属</th>
+              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-24 whitespace-nowrap">学部</th>
+              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-16 whitespace-nowrap">職位</th>
+              <th className="px-3 py-3 text-center font-semibold text-gray-700 w-24 whitespace-nowrap">研究者情報</th>
+              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-48 whitespace-nowrap">マッチング理由</th>
+              <th className="px-3 py-3 text-center font-semibold text-gray-700 w-16 whitespace-nowrap">お気に入り</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {researchers.map((researcher: any) => (
               <tr key={researcher.researcher_info?.researcher_id || researcher.matching_id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 text-gray-900">{researcher.researcher_info?.name}</td>
-                <td className="px-4 py-3 text-gray-700">
+                <td className="px-3 py-3 text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">{researcher.researcher_info?.name}</td>
+                <td className="px-3 py-3 text-gray-700 whitespace-nowrap overflow-hidden text-ellipsis">
                   {researcher.researcher_info?.university}
                 </td>
-                <td className="px-4 py-3 text-gray-700">
+                <td className="px-3 py-3 text-gray-700 whitespace-nowrap overflow-hidden text-ellipsis">
                   {researcher.researcher_info?.affiliation || "―"}
                 </td>
-                <td className="px-4 py-3 text-gray-700">
+                <td className="px-3 py-3 text-gray-700 whitespace-nowrap overflow-hidden text-ellipsis">
                   {researcher.researcher_info?.position || "―"}
                 </td>
-                <td className="px-4 py-3 text-center">
+                <td className="px-3 py-3 text-center">
                   <a 
                     href={`https://nrid.nii.ac.jp/ja/nrid/1${(researcher.researcher_info?.researcher_id || researcher.matching_id).toString().padStart(12, '0')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition whitespace-nowrap"
+                    className="inline-flex items-center px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition whitespace-nowrap"
                   >
                     プロフィール
-                    <svg className="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="ml-1 w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
                   </a>
                 </td>
-                <td className="px-4 py-3 text-gray-700 text-sm">
+                <td className="px-3 py-3 text-gray-700 text-xs">
                   {(() => {
                     const researcherId = (researcher.researcher_info?.researcher_id || researcher.matching_id).toString();
                     const fullReason = researcher.researcher_info?.explanation || 
@@ -348,16 +348,25 @@ export default function MatchedResearchers({
                                      researcher.matching_reason || 
                                      "―";
                     const isExpanded = expandedReasons.includes(researcherId);
-                    const previewText = fullReason.length > 20 ? fullReason.substring(0, 20) + "..." : fullReason;
+                    
+                    // 30文字で切って2行表示用のテキストを作成
+                    const getPreviewText = (text: string) => {
+                      if (text.length <= 30) return text;
+                      const firstLine = text.substring(0, 15);
+                      const secondLine = text.substring(15, 30) + "...";
+                      return `${firstLine}\n${secondLine}`;
+                    };
+                    
+                    const previewText = getPreviewText(fullReason);
                     
                     return (
                       <div className="relative">
-                        <div className="flex items-center whitespace-nowrap">
-                          <span className={isExpanded ? "whitespace-pre-wrap" : "whitespace-nowrap"}>{isExpanded ? fullReason : previewText}</span>
-                          {fullReason.length > 20 && (
+                        <div className="flex items-start">
+                          <span className={isExpanded ? "whitespace-pre-wrap leading-tight" : "whitespace-pre-line leading-tight"}>{isExpanded ? fullReason : previewText}</span>
+                          {fullReason.length > 30 && (
                             <button
                               onClick={() => toggleReasonExpansion(researcherId)}
-                              className="ml-2 text-blue-500 hover:text-blue-700 transition text-xs flex-shrink-0"
+                              className="ml-1 text-blue-500 hover:text-blue-700 transition text-xs flex-shrink-0"
                             >
                               {isExpanded ? "−" : "＋"}
                             </button>
@@ -367,10 +376,10 @@ export default function MatchedResearchers({
                     );
                   })()}
                 </td>
-                <td className="px-4 py-3 text-center">
+                <td className="px-3 py-3 text-center">
                   <button 
                     onClick={() => handleToggleFavoriteLocal((researcher.researcher_info?.researcher_id || researcher.matching_id).toString())}
-                    className={`transition text-lg ${
+                    className={`transition text-base ${
                       favorites.includes((researcher.researcher_info?.researcher_id || researcher.matching_id).toString())
                         ? "text-yellow-500 hover:text-yellow-600"
                         : "text-gray-400 hover:text-yellow-500"
