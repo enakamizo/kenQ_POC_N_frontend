@@ -80,42 +80,46 @@ export default function ProjectDetails({
 
   return (
     <div className="mb-8">
-      {/* 案件タイトル - 赤文字で大きく */}
-      <h1 className="text-2xl font-bold text-red-600 mb-6">{project.title}</h1>
+      {/* 案件情報の枠 */}
+      <div className="border border-gray-300 rounded-lg p-6 bg-white">
+        {/* 案件タイトル - 枠内上部に配置 */}
+        <h1 className="text-xl font-bold text-black mb-4">{project.title}</h1>
 
-      {/* 案件内容セクション */}
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-3">案件内容</h2>
-        <div className="bg-gray-50 p-4 rounded-lg border">
-          <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{project.background}</p>
-        </div>
-      </div>
-
-      {/* 詳細情報 - 2列レイアウト */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* 左列 */}
-        <div>
-          <div className="mb-4">
-            <h3 className="text-sm font-semibold text-gray-600 mb-1">業種</h3>
-            <p className="text-gray-800">{project.industry}</p>
-          </div>
-          
-          <div className="mb-4">
-            <h3 className="text-sm font-semibold text-gray-600 mb-1">大学</h3>
-            <p className="text-gray-800">全大学 (118校)</p>
-          </div>
+        {/* 案件内容セクション */}
+        <div className="mb-4">
+          <h2 className="text-sm font-semibold text-gray-800 mb-2">案件内容</h2>
+          <p className="text-gray-700 whitespace-pre-wrap leading-relaxed text-sm mb-4">{project.background}</p>
         </div>
 
-        {/* 右列 */}
-        <div>
-          <div className="mb-4">
-            <h3 className="text-sm font-semibold text-gray-600 mb-1">事業内容</h3>
-            <p className="text-gray-800">{project.businessDescription}</p>
+        {/* 間仕切り線 */}
+        <hr className="border-gray-300 mb-4" />
+
+        {/* 詳細情報 - 2列レイアウト */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* 左列 */}
+          <div>
+            <div className="mb-3">
+              <h3 className="text-sm font-semibold text-gray-800 mb-1">業種</h3>
+              <p className="text-gray-700 text-sm">{project.industry || '食料品'}</p>
+            </div>
+            
+            <div className="mb-3">
+              <h3 className="text-sm font-semibold text-gray-800 mb-1">大学</h3>
+              <p className="text-gray-700 text-sm">全大学 (118校)</p>
+            </div>
           </div>
-          
-          <div className="mb-4">
-            <h3 className="text-sm font-semibold text-gray-600 mb-1">研究者階層</h3>
-            <p className="text-gray-800">教授／准教授／助教／講師／助教授／助手／研究員／特任教授／特任助教／主任研究員</p>
+
+          {/* 右列 */}
+          <div>
+            <div className="mb-3">
+              <h3 className="text-sm font-semibold text-gray-800 mb-1">事業内容</h3>
+              <p className="text-gray-700 text-sm">{project.businessDescription || '食子会社、アイスクリーム事業、ヨーグルト・乳酸菌事業、冷凍事業'}</p>
+            </div>
+            
+            <div className="mb-3">
+              <h3 className="text-sm font-semibold text-gray-800 mb-1">研究者階層</h3>
+              <p className="text-gray-700 text-sm">教授／准教授／助教／講師／助教授／助手／研究員／特任教授／特任助教／主任研究員</p>
+            </div>
           </div>
         </div>
       </div>
