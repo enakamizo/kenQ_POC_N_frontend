@@ -45,7 +45,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
                 setSelectionMode('none');
             }
         }
-    }, [value, allUniversities, selectionMode, selectedUniversities]);
+    }, [value, allUniversities]);
 
     useEffect(() => {
         const allSelected = allUniversities.every((u) => selectedUniversities.includes(u));
@@ -55,7 +55,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
         if (JSON.stringify(newValue) !== JSON.stringify(value)) {
             onChange(newValue, allSelected);
         }
-    }, [selectedUniversities, allUniversities, onChange, value]);
+    }, [selectedUniversities, allUniversities]);
 
     const handleToggleUniversity = (univ: string) => {
         setSelectedUniversities((prev) => {
