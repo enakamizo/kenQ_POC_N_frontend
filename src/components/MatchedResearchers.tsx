@@ -239,6 +239,23 @@ export default function MatchedResearchers({
     ];
     
     const projectWS = XLSX.utils.aoa_to_sheet(projectInfo);
+    
+    // 案件情報シートのフォントを設定
+    const projectRange = XLSX.utils.decode_range(projectWS['!ref'] || 'A1');
+    for (let R = projectRange.s.r; R <= projectRange.e.r; ++R) {
+      for (let C = projectRange.s.c; C <= projectRange.e.c; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (projectWS[cellAddress]) {
+          projectWS[cellAddress].s = {
+            font: {
+              name: "游ゴシック",
+              sz: 11
+            }
+          };
+        }
+      }
+    }
+    
     XLSX.utils.book_append_sheet(wb, projectWS, "案件情報");
 
     // 研究者一覧のワークシート
@@ -271,6 +288,23 @@ export default function MatchedResearchers({
 
     const researcherData = [researcherHeaders, ...researcherRows];
     const researcherWS = XLSX.utils.aoa_to_sheet(researcherData);
+    
+    // 研究者一覧シートのフォントを設定
+    const researcherRange = XLSX.utils.decode_range(researcherWS['!ref'] || 'A1');
+    for (let R = researcherRange.s.r; R <= researcherRange.e.r; ++R) {
+      for (let C = researcherRange.s.c; C <= researcherRange.e.c; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (researcherWS[cellAddress]) {
+          researcherWS[cellAddress].s = {
+            font: {
+              name: "游ゴシック",
+              sz: 11
+            }
+          };
+        }
+      }
+    }
+    
     XLSX.utils.book_append_sheet(wb, researcherWS, "研究者一覧");
 
     // ファイル名を新しい形式に変更

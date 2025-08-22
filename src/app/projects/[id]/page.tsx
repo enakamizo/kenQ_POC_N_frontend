@@ -8,6 +8,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
     const projectId = params.id;
     const [projectData, setProjectData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [showBackConfirm, setShowBackConfirm] = useState(false);
 
     useEffect(() => {
         // localStorageから保存されたプロジェクトデータを取得
@@ -71,7 +72,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
             {/* 新規登録に戻るリンク */}
             <div className="mt-8 text-center">
                 <button
-                    onClick={() => window.location.href = '/register'}
+                    onClick={() => setShowBackConfirm(true)}
                     className="text-gray-600 hover:text-gray-800 transition underline"
                 >
                     ← 新規登録に戻る
@@ -84,6 +85,32 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                     *情報源は<a href="https://kaken.nii.ac.jp/ja/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 underline">https://kaken.nii.ac.jp/ja/</a>より
                 </p>
             </div>
+
+            {/* 新規作成に戻る確認モーダル */}
+            {showBackConfirm && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
+                        <h2 className="text-lg font-semibold mb-4 text-gray-800">新規作成に戻る確認</h2>
+                        <p className="text-gray-600 mb-6 leading-relaxed">
+                            新規作成に戻りますか？このページから離れると、レコメンドされた研究者の情報は失われます。
+                        </p>
+                        <div className="flex justify-end gap-3">
+                            <button
+                                onClick={() => setShowBackConfirm(false)}
+                                className="px-6 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition font-medium"
+                            >
+                                いいえ
+                            </button>
+                            <button
+                                onClick={() => window.location.href = '/register'}
+                                className="px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition font-medium"
+                            >
+                                はい
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
