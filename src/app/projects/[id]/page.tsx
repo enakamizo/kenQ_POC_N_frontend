@@ -77,6 +77,13 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                     ← 新規登録に戻る
                 </button>
             </div>
+
+            {/* 情報源の表示 */}
+            <div className="mt-4 text-center">
+                <p className="text-sm text-gray-500">
+                    *情報源は<a href="https://kaken.nii.ac.jp/ja/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 underline">https://kaken.nii.ac.jp/ja/</a>より
+                </p>
+            </div>
         </div>
     );
 }
