@@ -326,7 +326,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
                 }</p>
               </div>
               <div>
-                <p><span className="font-medium">研究者階層:</span> {researchResults.level?.length || 0}項目</p>
+                <p><span className="font-medium">研究者階層:</span> {Array.isArray(localFormData.researcherLevel) ? localFormData.researcherLevel.length : 0}項目</p>
               </div>
             </div>
           </div>
@@ -403,7 +403,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
                   ? `全大学（${Object.values(universitiesBySubregion).flat().length}校）`
                   : `${Array.isArray(formData.university) ? formData.university.length : 0}校`
               }</p>
-              <p><span className="font-medium">研究者階層:</span> {Array.isArray(formData.researcherLevel) ? formData.researcherLevel.length : 0}項目</p>
+              <p><span className="font-medium">研究者階層:</span> {Array.isArray(localFormData.researcherLevel) ? localFormData.researcherLevel.length : 0}項目</p>
             </div>
           </div>
           
