@@ -319,7 +319,11 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
               <div>
-                <p><span className="font-medium">対象大学:</span> {researchResults.university?.length || 0}校</p>
+                <p><span className="font-medium">対象大学:</span> {
+                  Array.isArray(localFormData.university) && localFormData.university.includes("全大学")
+                    ? `全大学（${Object.values(universitiesBySubregion).flat().length}校）`
+                    : `${Array.isArray(localFormData.university) ? localFormData.university.length : 0}校`
+                }</p>
               </div>
               <div>
                 <p><span className="font-medium">研究者階層:</span> {researchResults.level?.length || 0}項目</p>

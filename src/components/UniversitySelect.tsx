@@ -39,21 +39,23 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
         if (value?.includes("全大学") && selectionMode !== 'all') {
             setSelectedUniversities(allUniversities);
             setSelectionMode('all');
-        } else if (!value?.includes("全大学") && value) {
+        } else if (!value?.includes("全大学") && value && JSON.stringify(value) !== JSON.stringify(selectedUniversities)) {
             setSelectedUniversities(value);
             if (selectionMode === 'all') {
                 setSelectionMode('none');
             }
         }
-    }, [value]);
+    }, [value, allUniversities, selectionMode, selectedUniversities]);
 
     useEffect(() => {
         const allSelected = allUniversities.every((u) => selectedUniversities.includes(u));
-        onChange(
-            allSelected ? ["全大学"] : selectedUniversities,
-            allSelected
-        );
-    }, [selectedUniversities]);
+        const newValue = allSelected ? ["全大学"] : selectedUniversities;
+        
+        // 値が実際に変更された場合のみonChangeを呼び出す
+        if (JSON.stringify(newValue) !== JSON.stringify(value)) {
+            onChange(newValue, allSelected);
+        }
+    }, [selectedUniversities, allUniversities, onChange, value]);
 
     const handleToggleUniversity = (univ: string) => {
         setSelectedUniversities((prev) => {
