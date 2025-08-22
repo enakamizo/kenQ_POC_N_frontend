@@ -226,6 +226,12 @@ export default function MatchedResearchers({
 
     // 新しいワークブックを作成
     const wb = XLSX.utils.book_new();
+    
+    // ワークブック全体のデフォルトフォントを設定
+    if (!wb.Workbook) wb.Workbook = {};
+    if (!wb.Workbook.WBProps) wb.Workbook.WBProps = {};
+    wb.Workbook.WBProps.defaultFont = "游ゴシック";
+    wb.Workbook.WBProps.defaultFontSize = 11;
 
     // 案件情報のワークシート
     const projectInfo = [
@@ -246,11 +252,12 @@ export default function MatchedResearchers({
       for (let C = projectRange.s.c; C <= projectRange.e.c; ++C) {
         const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
         if (projectWS[cellAddress]) {
-          projectWS[cellAddress].s = {
-            font: {
-              name: "游ゴシック",
-              sz: 11
-            }
+          if (!projectWS[cellAddress].s) projectWS[cellAddress].s = {};
+          projectWS[cellAddress].s.font = {
+            name: "游ゴシック",
+            sz: 11,
+            family: 1,
+            charset: 128
           };
         }
       }
@@ -295,11 +302,12 @@ export default function MatchedResearchers({
       for (let C = researcherRange.s.c; C <= researcherRange.e.c; ++C) {
         const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
         if (researcherWS[cellAddress]) {
-          researcherWS[cellAddress].s = {
-            font: {
-              name: "游ゴシック",
-              sz: 11
-            }
+          if (!researcherWS[cellAddress].s) researcherWS[cellAddress].s = {};
+          researcherWS[cellAddress].s.font = {
+            name: "游ゴシック",
+            sz: 11,
+            family: 1,
+            charset: 128
           };
         }
       }
@@ -342,11 +350,11 @@ export default function MatchedResearchers({
             <tr>
               <th className="px-3 py-3 text-left font-semibold text-gray-700 w-20 whitespace-nowrap">氏名</th>
               <th className="px-3 py-3 text-left font-semibold text-gray-700 w-32 whitespace-nowrap">所属</th>
-              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-24 whitespace-nowrap">学部</th>
+              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-32 whitespace-nowrap">学部</th>
               <th className="px-3 py-3 text-left font-semibold text-gray-700 w-16 whitespace-nowrap">職位</th>
               <th className="px-3 py-3 text-center font-semibold text-gray-700 w-24 whitespace-nowrap">研究者情報</th>
               <th className="px-3 py-3 text-left font-semibold text-gray-700 w-48 whitespace-nowrap">マッチング理由</th>
-              <th className="px-3 py-3 text-center font-semibold text-gray-700 w-16 whitespace-nowrap">お気に入り</th>
+              <th className="px-3 py-3 text-center font-semibold text-gray-700 w-20 whitespace-nowrap">お気に入り</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -367,7 +375,8 @@ export default function MatchedResearchers({
                     href={`https://nrid.nii.ac.jp/ja/nrid/1${(researcher.researcher_info?.researcher_id || researcher.matching_id).toString().padStart(12, '0')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition whitespace-nowrap"
+                    className="inline-flex items-center px-1.5 py-0.5 bg-blue-500 text-white rounded hover:bg-blue-600 transition whitespace-nowrap"
+                    style={{ fontSize: '10px' }}
                   >
                     プロフィール
                     <svg className="ml-1 w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -384,11 +393,11 @@ export default function MatchedResearchers({
                                      "―";
                     const isExpanded = expandedReasons.includes(researcherId);
                     
-                    // 30文字で切って2行表示用のテキストを作成
+                    // 30文字で切って2行表示用のテキストを作成（1行20文字×2行に調整）
                     const getPreviewText = (text: string) => {
                       if (text.length <= 30) return text;
-                      const firstLine = text.substring(0, 15);
-                      const secondLine = text.substring(15, 30) + "...";
+                      const firstLine = text.substring(0, 20);
+                      const secondLine = text.substring(20, 30) + "...";
                       return `${firstLine}\n${secondLine}`;
                     };
                     
