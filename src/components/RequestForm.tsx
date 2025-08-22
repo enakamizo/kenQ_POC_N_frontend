@@ -202,7 +202,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
     if (!localFormData.title) missingFields.push("案件タイトル");
     if (!localFormData.background) missingFields.push("案件内容");
     if (!formData.university || formData.university.length === 0) missingFields.push("大学");
-    if (!formData.researcherLevel || formData.researcherLevel.length === 0) missingFields.push("研究者階層");
+    if (!localFormData.researcherLevel || localFormData.researcherLevel.length === 0) missingFields.push("研究者階層");
 
     if (missingFields.length > 0) {
       setValidationError(`必須項目を入力してください：${missingFields.join("、")}`);
