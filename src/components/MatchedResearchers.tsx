@@ -506,7 +506,7 @@ export default function MatchedResearchers({
             <button
               onClick={() => {
                 setShowFavoriteSuccess(false);
-                setFavorites([]); // お気に入り選択をリセット
+                // お気に入り選択はリセットしない（黄色い星を保持）
               }}
               className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
             >
