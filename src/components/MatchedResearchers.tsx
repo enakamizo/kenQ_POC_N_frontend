@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import * as XLSX from 'xlsx';
 
 //export default function MatchedResearchers({ projectId }: { projectId: string }) {
 export default function MatchedResearchers({
@@ -20,6 +21,7 @@ export default function MatchedResearchers({
   const [selectedResearcher, setSelectedResearcher] = useState<any | null>(null);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [projectTitle, setProjectTitle] = useState("");
+  const [projectData, setProjectData] = useState<any>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showFavoriteConfirm, setShowFavoriteConfirm] = useState(false);
   const [showFavoriteSuccess, setShowFavoriteSuccess] = useState(false);
@@ -38,6 +40,7 @@ export default function MatchedResearchers({
           console.log("MatchedResearchers - 研究者数:", data.matchingResults.matched_researchers?.length);
           setResearchers(data.matchingResults.matched_researchers || []);
           setProjectTitle(data.projectData.title || "");
+          setProjectData(data.projectData || null);
           setLoading(false);
           return;
         }
@@ -211,77 +214,75 @@ export default function MatchedResearchers({
     }
   };
 
-  const handleExportCSV = () => {
-    console.log("📊 CSV出力開始 - researchers.length:", researchers.length);
+  const handleExportExcel = () => {
+    console.log("📊 Excel出力開始 - researchers.length:", researchers.length);
     console.log("📊 Researchers data:", researchers);
     
     if (researchers.length === 0) {
-      console.log("📊 研究者データが空のため、CSV出力をスキップ");
+      console.log("📊 研究者データが空のため、Excel出力をスキップ");
       alert("エクスポートする研究者データがありません。");
       return;
     }
 
-    const headers = [
-      "研究者ID",
+    // 新しいワークブックを作成
+    const wb = XLSX.utils.book_new();
+
+    // 案件情報のワークシート
+    const projectInfo = [
+      ["案件情報"],
+      ["案件タイトル", projectData?.title || ""],
+      ["案件内容", projectData?.background || ""],
+      ["業種", projectData?.industry || "食料品"],
+      ["事業内容", projectData?.businessDescription || "食子会社、アイスクリーム事業、ヨーグルト・乳酸菌事業、冷凍事業"],
+      ["大学", "全大学 (118校)"],
+      ["研究者階層", "教授／准教授／助教／講師／助教授／助手／研究員／特任教授／特任助教／主任研究員"]
+    ];
+    
+    const projectWS = XLSX.utils.aoa_to_sheet(projectInfo);
+    XLSX.utils.book_append_sheet(wb, projectWS, "案件情報");
+
+    // 研究者一覧のワークシート
+    const researcherHeaders = [
       "氏名",
-      "氏名（ローマ字）",
-      "ふりがな",
       "所属",
       "部署",
       "職位",
-      "専門分野",
-      "キーワード",
+      "研究者情報",
       "マッチング理由",
-      "科研url"
+      "お気に入り登録"
     ];
 
-    const rows = researchers.map((r) => {
+    const researcherRows = researchers.map((r) => {
       const researcherId = r.researcher_info?.researcher_id || r.matching_id;
       const kakenNumber = researcherId.toString().padStart(12, '0');
       const kakenUrl = `https://nrid.nii.ac.jp/ja/nrid/1${kakenNumber}`;
+      const isFavorite = favorites.includes(researcherId.toString()) ? "登録済み" : "未登録";
 
       return [
-        researcherId,
         r.researcher_info?.name || r.researcher_name || "―",
-        r.researcher_name_alphabet || "―",
-        r.researcher_name_kana || "―",
         r.researcher_info?.university || r.researcher_affiliation_current || "―",
         r.researcher_info?.affiliation || r.researcher_department_current || "―",
         r.researcher_info?.position || r.researcher_position_current || "―",
-        r.research_field_pi || "―",
-        r.keywords_pi || "―",
-        r.researcher_info?.explanation || r.explanation || r.matching_reason || "―",
         kakenUrl,
+        r.researcher_info?.explanation || r.explanation || r.matching_reason || "―",
+        isFavorite
       ];
     });
 
-    const csvContent =
-      [headers, ...rows]
-        .map((row) =>
-          row
-            .map((cell) =>
-              `"${String(cell).replace(/"/g, '""')}"`
-            )
-            .join(",")
-        )
-        .join("\n");
+    const researcherData = [researcherHeaders, ...researcherRows];
+    const researcherWS = XLSX.utils.aoa_to_sheet(researcherData);
+    XLSX.utils.book_append_sheet(wb, researcherWS, "研究者一覧");
 
-    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-
+    // ファイル名を新しい形式に変更
     const sanitizedTitle =
       projectTitle && projectTitle.trim() !== ""
         ? "_" + projectTitle.replace(/[\\/:*?"<>|]/g, "_").slice(0, 30)
         : "無題";
 
-    //link.setAttribute("download", `研究者一覧_${projectId}${sanitizedTitle}.csv`);
-    link.setAttribute("download", `研究者一覧_${sanitizedTitle}.csv`);
+    const filename = `${projectId}${sanitizedTitle}.xlsx`;
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Excelファイルをダウンロード
+    XLSX.writeFile(wb, filename);
   };
 
   console.log("MatchedResearchers - render時のresearchers:", researchers);
@@ -409,10 +410,10 @@ export default function MatchedResearchers({
           お気に入り登録する
         </button>
         <button
-          onClick={handleExportCSV}
+          onClick={handleExportExcel}
           className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-medium"
         >
-          CSV出力
+          Excel出力
         </button>
       </div>
 
