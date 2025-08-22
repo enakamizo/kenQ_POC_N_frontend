@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import universitiesBySubregion from "@/data/universities_by_subregion.json";
 
 type UniversitySelectProps = {
@@ -15,6 +15,7 @@ const favoriteUniversities = [
 
 export default function UniversitySelect({ value, onChange }: UniversitySelectProps) {
     const allUniversities = Object.values(universitiesBySubregion).flat();
+    const isUpdatingRef = useRef(false);
     
     // Initialize state based on the value prop
     const getInitialState = () => {
@@ -34,28 +35,17 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
     const [selectedUniversities, setSelectedUniversities] = useState<string[]>(initialState.selectedUniversities);
     const [selectionMode, setSelectionMode] = useState<'none' | 'all' | 'favorites' | 'regions'>(initialState.selectionMode);
 
-    // Handle value prop changes from parent
+    // Call onChange when selectedUniversities changes (but not during initialization)
     useEffect(() => {
-        if (value?.includes("全大学") && selectionMode !== 'all') {
-            setSelectedUniversities(allUniversities);
-            setSelectionMode('all');
-        } else if (!value?.includes("全大学") && value && JSON.stringify(value) !== JSON.stringify(selectedUniversities)) {
-            setSelectedUniversities(value);
-            if (selectionMode === 'all') {
-                setSelectionMode('none');
-            }
+        if (isUpdatingRef.current) {
+            isUpdatingRef.current = false;
+            return;
         }
-    }, [value, allUniversities]);
-
-    useEffect(() => {
+        
         const allSelected = allUniversities.every((u) => selectedUniversities.includes(u));
         const newValue = allSelected ? ["全大学"] : selectedUniversities;
-        
-        // 値が実際に変更された場合のみonChangeを呼び出す
-        if (JSON.stringify(newValue) !== JSON.stringify(value)) {
-            onChange(newValue, allSelected);
-        }
-    }, [selectedUniversities, allUniversities]);
+        onChange(newValue, allSelected);
+    }, [selectedUniversities, allUniversities, onChange]);
 
     const handleToggleUniversity = (univ: string) => {
         setSelectedUniversities((prev) => {
@@ -70,6 +60,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
 
     const handleSelectAll = () => {
         const isAllSelected = selectionMode === 'all';
+        isUpdatingRef.current = true;
         if (isAllSelected) {
             setSelectedUniversities([]);
             setSelectionMode('none');
@@ -81,6 +72,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
 
     const handleSelectFavorites = () => {
         const isFavoritesSelected = selectionMode === 'favorites';
+        isUpdatingRef.current = true;
         if (isFavoritesSelected) {
             setSelectionMode('none');
             setSelectedUniversities([]);
@@ -93,6 +85,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
 
     const handleSelectRegions = () => {
         const isRegionsSelected = selectionMode === 'regions';
+        isUpdatingRef.current = true;
         if (isRegionsSelected) {
             setSelectionMode('none');
             setSelectedUniversities([]);
