@@ -226,12 +226,6 @@ export default function MatchedResearchers({
 
     // 新しいワークブックを作成
     const wb = XLSX.utils.book_new();
-    
-    // ワークブック全体のデフォルトフォントを設定
-    if (!wb.Workbook) wb.Workbook = {};
-    if (!wb.Workbook.WBProps) wb.Workbook.WBProps = {};
-    wb.Workbook.WBProps.defaultFont = "游ゴシック";
-    wb.Workbook.WBProps.defaultFontSize = 11;
 
     // 案件情報のワークシート
     const projectInfo = [
