@@ -55,14 +55,14 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
 
     if (!projectData) {
         return (
-            <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg mt-10">
+            <div className="max-w-7xl mx-auto p-8 bg-white rounded-lg mt-10">
                 <p>プロジェクトデータが見つかりません。</p>
             </div>
         );
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg mt-10">
+        <div className="max-w-7xl mx-auto p-8 bg-white rounded-lg mt-10">
             {/* 上段：案件の詳細 */}
             <ProjectDetails projectId={projectId} setLoading={() => {}} />
 
@@ -73,7 +73,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
             <div className="mt-8 text-center">
                 <button
                     onClick={() => setShowBackConfirm(true)}
-                    className="text-gray-600 hover:text-gray-800 transition underline"
+                    className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium"
                 >
                     ← 新規登録に戻る
                 </button>

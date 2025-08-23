@@ -339,32 +339,39 @@ export default function MatchedResearchers({
       </div>
 
       <div className="bg-white rounded-lg border border-gray-200 overflow-x-auto">
-        <table className="w-full text-sm border-collapse table-fixed">
+        <table className="w-full text-sm border-collapse">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-20 whitespace-nowrap">氏名</th>
-              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-32 whitespace-nowrap">所属</th>
-              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-32 whitespace-nowrap">学部</th>
-              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-16 whitespace-nowrap">職位</th>
-              <th className="px-3 py-3 text-center font-semibold text-gray-700 w-24 whitespace-nowrap">研究者情報</th>
-              <th className="px-3 py-3 text-left font-semibold text-gray-700 w-48 whitespace-nowrap">マッチング理由</th>
-              <th className="px-3 py-3 text-center font-semibold text-gray-700 w-20 whitespace-nowrap">お気に入り</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">氏名</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">所属</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">部署</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">職位</th>
+              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap">研究者情報</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">
+                <div className="flex items-center">
+                  <span>マッチング理由</span>
+                  <svg className="ml-1 w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </th>
+              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap">お気に入り登録</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {researchers.map((researcher: any) => (
               <tr key={researcher.researcher_info?.researcher_id || researcher.matching_id} className="hover:bg-gray-50">
-                <td className="px-3 py-3 text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">{researcher.researcher_info?.name}</td>
-                <td className="px-3 py-3 text-gray-700 whitespace-nowrap overflow-hidden text-ellipsis">
+                <td className="px-4 py-4 text-gray-900">{researcher.researcher_info?.name}</td>
+                <td className="px-4 py-4 text-gray-700">
                   {researcher.researcher_info?.university}
                 </td>
-                <td className="px-3 py-3 text-gray-700 whitespace-nowrap overflow-hidden text-ellipsis">
+                <td className="px-4 py-4 text-gray-700">
                   {researcher.researcher_info?.affiliation || "―"}
                 </td>
-                <td className="px-3 py-3 text-gray-700 whitespace-nowrap overflow-hidden text-ellipsis">
+                <td className="px-4 py-4 text-gray-700">
                   {researcher.researcher_info?.position || "―"}
                 </td>
-                <td className="px-3 py-3 text-center">
+                <td className="px-4 py-4 text-center">
                   <a 
                     href={`https://nrid.nii.ac.jp/ja/nrid/1${(researcher.researcher_info?.researcher_id || researcher.matching_id).toString().padStart(12, '0')}`}
                     target="_blank"
@@ -378,7 +385,7 @@ export default function MatchedResearchers({
                     </svg>
                   </a>
                 </td>
-                <td className="px-3 py-3 text-gray-700 text-xs">
+                <td className="px-4 py-4 text-gray-700 text-xs">
                   {(() => {
                     const researcherId = (researcher.researcher_info?.researcher_id || researcher.matching_id).toString();
                     const fullReason = researcher.researcher_info?.explanation || 
@@ -414,7 +421,7 @@ export default function MatchedResearchers({
                     );
                   })()}
                 </td>
-                <td className="px-3 py-3 text-center">
+                <td className="px-4 py-4 text-center">
                   <button 
                     onClick={() => handleToggleFavoriteLocal((researcher.researcher_info?.researcher_id || researcher.matching_id).toString())}
                     className={`transition text-base ${
@@ -442,14 +449,18 @@ export default function MatchedResearchers({
             }
             setShowFavoriteConfirm(true);
           }}
-          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium"
+          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium flex items-center gap-2"
         >
-          お気に入り登録する
+          <span>☆</span>
+          お気に入りを保存する
         </button>
         <button
           onClick={handleExportExcel}
-          className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-medium"
+          className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-medium flex items-center gap-2"
         >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
           Excel出力
         </button>
       </div>
