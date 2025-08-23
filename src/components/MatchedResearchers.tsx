@@ -339,23 +339,21 @@ export default function MatchedResearchers({
       </div>
 
       <div className="bg-white rounded-lg border border-gray-200 overflow-x-auto">
-        <table className="w-full text-sm border-collapse">
+        <table className="w-full text-sm border-collapse table-fixed">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">氏名</th>
-              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">所属</th>
-              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">部署</th>
-              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">職位</th>
-              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap">研究者情報</th>
-              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap">
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[12%]">氏名</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[18%]">所属</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[15%]">部署</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[10%]">職位</th>
+              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap w-[12%]">研究者情報</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[20%]">
                 <div className="flex items-center">
                   <span>マッチング理由</span>
-                  <svg className="ml-1 w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
+                  <span className="ml-1 text-gray-500 text-sm">＋</span>
                 </div>
               </th>
-              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap">お気に入り登録</th>
+              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap w-[13%]">お気に入り登録</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">

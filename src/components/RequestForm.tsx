@@ -742,7 +742,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
                   setLocalFormData(prev => ({ ...prev, researcherLevel: updatedLevels }));
                   setFormData(prev => ({ ...prev, researcherLevel: updatedLevels }));
                 }}
-                className="w-4 h-4"
+                className="w-4 h-4 accent-blue-500"
               />
               <span>すべて選択</span>
             </label>
@@ -767,7 +767,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
                     setLocalFormData(prev => ({ ...prev, researcherLevel: updatedLevels }));
                     setFormData(prev => ({ ...prev, researcherLevel: updatedLevels }));
                   }}
-                  className="w-4 h-4"
+                  className="w-4 h-4 accent-blue-500"
                 />
                 <span>{level}</span>
               </label>

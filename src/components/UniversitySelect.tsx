@@ -121,7 +121,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
                             type="checkbox"
                             checked={selectionMode === 'all'}
                             onChange={handleSelectAll}
-                            className="w-4 h-4"
+                            className="w-4 h-4 accent-blue-500"
                         />
                         <span>全大学を選択（{allUniversities.length}校）</span>
                     </label>
@@ -134,7 +134,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
                             type="checkbox"
                             checked={selectionMode === 'favorites'}
                             onChange={handleSelectFavorites}
-                            className="w-4 h-4"
+                            className="w-4 h-4 accent-blue-500"
                         />
                         <span>お気に入りの大学</span>
                     </label>
@@ -150,7 +150,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
                                         type="checkbox"
                                         checked={selectedUniversities.includes(univ)}
                                         onChange={() => handleToggleUniversity(univ)}
-                                        className="w-4 h-4"
+                                        className="w-4 h-4 accent-blue-500"
                                     />
                                     <span>{univ}</span>
                                 </label>
@@ -166,7 +166,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
                             type="checkbox"
                             checked={selectionMode === 'regions'}
                             onChange={handleSelectRegions}
-                            className="w-4 h-4"
+                            className="w-4 h-4 accent-blue-500"
                         />
                         <span>エリアから選択</span>
                     </label>
@@ -187,7 +187,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
                                             type="checkbox"
                                             checked={allRegionSelected}
                                             onChange={() => handleToggleRegion(region, universities)}
-                                            className="w-4 h-4"
+                                            className="w-4 h-4 accent-blue-500"
                                         />
                                         <span className="text-sm">{region}</span>
                                     </div>
@@ -200,7 +200,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
                                                         type="checkbox"
                                                         checked={isSelected}
                                                         onChange={() => handleToggleUniversity(univ)}
-                                                        className="w-3 h-3"
+                                                        className="w-3 h-3 accent-blue-500"
                                                     />
                                                     <span>{univ}</span>
                                                 </label>
