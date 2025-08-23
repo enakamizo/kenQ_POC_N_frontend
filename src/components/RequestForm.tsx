@@ -317,7 +317,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
             
             <h4 className="text-blue-600 font-medium mb-3">{researchResults.project_title}</h4>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+            <div className="space-y-2 text-sm text-gray-600">
               <div>
                 <p><span className="font-medium">対象大学:</span> {
                   Array.isArray(localFormData.university) && localFormData.university.includes("全大学")
@@ -353,6 +353,12 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
             >
               結果に進む
             </button>
+          </div>
+          
+          <div className="mt-8 text-center">
+            <p className="text-sm text-gray-500">
+              ※ 結果ページでは詳細な研究者情報、連絡先、推奨アプローチ方法をご確認いただけます
+            </p>
           </div>
         </div>
       </div>
