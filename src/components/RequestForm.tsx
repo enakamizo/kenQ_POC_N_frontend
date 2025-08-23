@@ -701,7 +701,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
       {/* 大学 */}
       <div>
         <label className="block text-sm font-medium mb-1">大学 <span className="text-red-500">*</span></label>
-        <div className="p-4 rounded-lg border border-gray-300">
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-300">
           <UniversitySelect
             value={formData.university || []}
             onChange={(value) => {
