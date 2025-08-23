@@ -111,7 +111,7 @@ export default function UniversitySelect({ value, onChange }: UniversitySelectPr
     };
 
     return (
-        <div className="bg-gray-50 p-6 rounded-lg border border-gray-300">
+        <div>
             {/* 選択オプション */}
             <div className="space-y-3">
                 {/* 全大学を選択 */}
