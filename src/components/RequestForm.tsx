@@ -277,8 +277,8 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
       <div className="max-w-4xl mx-auto p-8 bg-white rounded-lg">
         <div className="text-center">
           <div className="flex items-center justify-center mb-6">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-              <svg className="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+              <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
             </div>
@@ -290,8 +290,8 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
           </p>
           
           <div className="flex items-center justify-center mb-8">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-              <svg className="w-10 h-10 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+              <svg className="w-10 h-10 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
             </div>
@@ -349,7 +349,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
                   router.push(`/projects/${projectId}`);
                 }
               }}
-              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               結果に進む
             </button>
@@ -398,7 +398,7 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
             最適な研究者をAIが分析しています。処理完了まで画面を閉じずにお待ちください...
           </p>
           
-          <p className="text-green-600 text-sm mb-8">※ セッションが復元されました</p>
+          <p className="text-blue-600 text-sm mb-8">※ セッションが復元されました</p>
           
           <div className="bg-blue-50 p-6 rounded-lg mb-8 text-left">
             <h2 className="text-lg font-semibold text-blue-800 mb-4">リサーチ中の案件</h2>
@@ -614,14 +614,16 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
               </p>
               
               <div className="mb-4">
-                <div className="flex justify-between items-center mb-2">
-                  <label className="block text-sm font-medium text-gray-700">提案案件内容</label>
-                  <span className="text-xs text-gray-400">
-                    {diagnosisResult?.length || 0}/2000文字
-                  </span>
+                <div className="mb-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">提案案件内容</label>
                 </div>
                 <div className="border border-gray-300 rounded-lg p-3 bg-gray-50 max-h-60 overflow-y-auto">
                   <p className="whitespace-pre-wrap text-sm text-gray-800">{diagnosisResult}</p>
+                </div>
+                <div className="text-right mt-1">
+                  <span className="text-xs text-gray-400">
+                    {diagnosisResult?.length || 0}/1000文字
+                  </span>
                 </div>
               </div>
               

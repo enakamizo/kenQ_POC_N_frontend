@@ -347,13 +347,13 @@ export default function MatchedResearchers({
               <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[15%]">部署</th>
               <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[10%]">職位</th>
               <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap w-[12%]">研究者情報</th>
-              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[20%]">
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[25%]">
                 <div className="flex items-center">
                   <span>マッチング理由</span>
                   <span className="ml-1 text-gray-500 text-sm">＋</span>
                 </div>
               </th>
-              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap w-[13%]">お気に入り登録</th>
+              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap w-[8%]">お気に入り登録</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
