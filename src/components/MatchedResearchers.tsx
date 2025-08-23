@@ -529,13 +529,13 @@ export default function MatchedResearchers({
             <div className="flex justify-center gap-4">
               <button
                 onClick={() => setShowFavoriteConfirm(false)}
-                className="px-6 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition"
+                className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium"
               >
                 いいえ
               </button>
               <button
                 onClick={handleSubmitFavorites}
-                className="px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition"
+                className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium"
               >
                 はい
               </button>
@@ -555,7 +555,7 @@ export default function MatchedResearchers({
                 setShowFavoriteSuccess(false);
                 // お気に入り選択はリセットしない（黄色い星を保持）
               }}
-              className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium"
             >
               OK
             </button>

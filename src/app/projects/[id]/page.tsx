@@ -25,7 +25,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
 
     if (loading) {
         return (
-            <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
                     <p className="text-lg font-medium mb-4">しばらくお待ちください</p>
                     <svg
@@ -97,13 +97,13 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                         <div className="flex justify-end gap-3">
                             <button
                                 onClick={() => setShowBackConfirm(false)}
-                                className="px-6 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition font-medium"
+                                className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium"
                             >
                                 いいえ
                             </button>
                             <button
                                 onClick={() => window.location.href = '/register'}
-                                className="px-6 py-2 bg-black text-white rounded hover:bg-gray-800 transition font-medium"
+                                className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium"
                             >
                                 はい
                             </button>

@@ -571,12 +571,10 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
 
         {/* AI診断確認ポップアップ */}
         {showConfirmModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
               <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                  <span className="text-blue-600 text-lg">✨</span>
-                </div>
+                <span className="text-blue-600 text-xl mr-3">✨</span>
                 <h2 className="text-lg font-semibold">AIアシスト - 案件内容の最適化</h2>
               </div>
               <p className="text-gray-700 mb-4">
@@ -587,13 +585,13 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
               </p>
               <div className="flex gap-3 justify-end">
                 <button
-                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50"
+                  className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium"
                   onClick={() => setShowConfirmModal(false)}
                 >
                   キャンセル
                 </button>
                 <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center gap-2"
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium flex items-center gap-2"
                   onClick={executeDiagnosis}
                 >
                   <span>✨</span>
@@ -605,12 +603,10 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
         )}
 
         {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full mx-4">
               <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                  <span className="text-blue-600 text-lg">✨</span>
-                </div>
+                <span className="text-blue-600 text-xl mr-3">✨</span>
                 <h2 className="text-lg font-semibold">AIアシスト - 案件内容の最適化</h2>
               </div>
               <p className="text-gray-700 mb-4">
@@ -631,13 +627,13 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
               
               <div className="flex gap-3 justify-end">
                 <button
-                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50"
+                  className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium"
                   onClick={() => setShowModal(false)}
                 >
                   キャンセル
                 </button>
                 <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium"
                   onClick={applyDiagnosisResult}
                 >
                   提案を適用
@@ -648,12 +644,10 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
         )}
 
         {loading && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
               <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                  <span className="text-blue-600 text-lg">✨</span>
-                </div>
+                <span className="text-blue-600 text-xl mr-3">✨</span>
                 <h2 className="text-lg font-semibold">AIアシスト - 案件内容の最適化</h2>
               </div>
               <p className="text-gray-700 mb-6">
@@ -687,11 +681,11 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
         )}
 
         {validationError && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
               <p className="text-lg font-medium mb-4 text-red-600">{validationError}</p>
               <button
-                className="px-4 py-2 bg-blue-400 text-white font-semibold rounded hover:bg-blue-500"
+                className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium"
                 onClick={() => setValidationError(null)}
               >
                 OK
