@@ -353,7 +353,7 @@ export default function MatchedResearchers({
                   <span className="ml-1 text-gray-500 text-sm">＋</span>
                 </div>
               </th>
-              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap w-[8%]">お気に入り登録</th>
+              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap w-[8%]">お気に入り</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">

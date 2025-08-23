@@ -398,7 +398,6 @@ export default function RequestForm({ onSubmit, onStatusChange }: RequestFormPro
             最適な研究者をAIが分析しています。処理完了まで画面を閉じずにお待ちください...
           </p>
           
-          <p className="text-blue-600 text-sm mb-8">※ セッションが復元されました</p>
           
           <div className="bg-blue-50 p-6 rounded-lg mb-8 text-left">
             <h2 className="text-lg font-semibold text-blue-800 mb-4">リサーチ中の案件</h2>

@@ -75,7 +75,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                     onClick={() => setShowBackConfirm(true)}
                     className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium"
                 >
-                    ← 新規登録に戻る
+                    ← 案件登録に戻る
                 </button>
             </div>
 
@@ -90,9 +90,9 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
             {showBackConfirm && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
-                        <h2 className="text-lg font-semibold mb-4 text-gray-800">新規作成に戻る確認</h2>
+                        <h2 className="text-lg font-semibold mb-4 text-gray-800">案件登録に戻る</h2>
                         <p className="text-gray-600 mb-6 leading-relaxed">
-                            新規作成に戻りますか？このページから離れると、レコメンドされた研究者の情報は失われます。
+                            案件登録に戻りますか？このページから離れると、レコメンドされた研究者の情報は失われます。
                         </p>
                         <div className="flex justify-end gap-3">
                             <button

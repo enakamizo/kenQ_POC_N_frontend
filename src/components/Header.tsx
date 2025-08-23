@@ -38,7 +38,7 @@ const Header = () => {
           onClick={() => router.push("/register")}
           className="text-gray-700 hover:text-gray-900 transition"
         >
-          新規登録
+          案件登録
         </button>
         
         {/* ユーザー名 */}
