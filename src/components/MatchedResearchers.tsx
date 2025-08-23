@@ -342,12 +342,12 @@ export default function MatchedResearchers({
         <table className="w-full text-sm border-collapse table-fixed">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[12%]">氏名</th>
-              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[18%]">所属</th>
-              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[15%]">部署</th>
-              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[10%]">職位</th>
-              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap w-[12%]">研究者情報</th>
-              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[25%]">
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[10%]">氏名</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[16%]">所属</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[12%]">部署</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[8%]">職位</th>
+              <th className="px-4 py-4 text-center font-semibold text-gray-700 whitespace-nowrap w-[10%]">研究者情報</th>
+              <th className="px-4 py-4 text-left font-semibold text-gray-700 whitespace-nowrap w-[36%]">
                 <div className="flex items-center">
                   <span>マッチング理由</span>
                   <span className="ml-1 text-gray-500 text-sm">＋</span>
